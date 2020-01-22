@@ -1,0 +1,21 @@
+: "LIST"
+    alias ls='ls -F --color=auto'
+    alias list='ls -alF'
+    alias ll='ls -l'
+    alias la='ls -A'
+    alias lc='ls -CF'
+
+: "GREP DISPLAY"
+    alias rm-sharp="grep -v '^\s*#'" 
+    alias rm-white="grep -v '^\s*$'"
+    alias rm-semicol="grep -v '^\s*;'"
+    
+: "Network Shortcut" 
+    alias inet4='ip a | grep -v inet6 | grep inet'
+    alias inet6='ip a | grep inet6'
+    alias inet='ip a  | grep inet'
+    alias ipaddr='echo $IP_ADDRESS'
+    alias trec='npx terminalizer'
+    
+: "history"
+    alias history-all='history -E 1'
