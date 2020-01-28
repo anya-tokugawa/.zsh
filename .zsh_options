@@ -20,3 +20,4 @@ setopt always_last_prompt
 setopt cdable_vars
 setopt PRINT_EIGHT_BIT
 setopt no_tify
+setopt interactivecomments
