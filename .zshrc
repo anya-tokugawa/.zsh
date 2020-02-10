@@ -18,3 +18,15 @@ cd $HOME
 function chpwd() {
     ls -F
 } # auto display list directory after changed director
+function @(){
+    if [ $# -eq 0 ];
+    then
+        unset MEMO
+        return
+    else
+        for text in $@
+        do
+            MEMO="${MEMO} ${text}"
+        done
+    fi
+}

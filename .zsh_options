@@ -21,3 +21,7 @@ setopt cdable_vars
 setopt PRINT_EIGHT_BIT
 setopt no_tify
 setopt interactivecomments
+setopt prompt_subst
+setopt extended_glob
+setopt auto_menu
+setopt print_eight_bit

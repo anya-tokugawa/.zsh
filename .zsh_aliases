@@ -16,6 +16,9 @@
     alias inet='ip a  | grep inet'
     alias ipaddr='echo $IP_ADDRESS'
     alias trec='npx terminalizer'
-    
+: "Shortcut"
+    alias e='vim'
+    alias g='subl'
+    alias bye='loginctl lock-session'
 : "history"
     alias history-all='history -E 1'
