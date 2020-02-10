@@ -2,7 +2,7 @@
 export ZDOTDIR=$HOME/.zsh
 
 : "ZSH HISTORY"
-export HISTFILE=${HOME}/.zsh_history
+export HISTFILE=${ZDOTDIR}/.zsh_history
 export HISTSIZE=1000
 export SAVEHIST=10000
 
@@ -40,3 +40,5 @@ PROMPT="%F{green}${HOST}%F{cyan}%#:%F{reset}"
 
 : "OUTPUT DISPLAY"
 export DISPLAY=":0"
+
+: "Load Aliases"; source $ZDOTDIR/.zsh_profile

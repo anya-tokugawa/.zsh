@@ -1,4 +1,4 @@
-# Check Update
+: "Check Update"
 	function zsh_update() {
 		cd $HOME/.zsh
         OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags)
@@ -13,5 +13,8 @@
         fi
     }
     zsh_update
-# Define Function
-	function chpwd() { ls -F } # auto display list directory after changed directory
+: "Define Function"
+cd $HOME
+function chpwd() {
+    ls -F
+} # auto display list directory after changed director

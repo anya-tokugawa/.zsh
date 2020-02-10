@@ -6,6 +6,6 @@ autoload colors
 
 : "Some Setting load"
 
-: "Load setopt";  source .zsh_options
-: "Load KeyBind"; source .zsh_keybind
-: "Load Aliases"; source .zsh_aliases
+: "Load setopt";  source $ZDOTDIR//.zsh_options
+: "Load KeyBind"; source $ZDOTDIR/.zsh_keybind
+: "Load Aliases"; source $ZDOTDIR/.zsh_aliases
