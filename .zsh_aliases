@@ -17,6 +17,7 @@
     alias ipaddr='echo $IP_ADDRESS'
     alias trec='npx terminalizer'
 : "Shortcut"
+    alias vi='vim'
     alias e='vim'
     alias g='subl'
     alias bye='loginctl lock-session'
