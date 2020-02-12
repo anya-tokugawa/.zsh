@@ -26,7 +26,22 @@ function @(){
     else
         for text in $@
         do
-            MEMO="${MEMO} ${text}"
+            declare -g MEMO="${MEMO} ${text}"
         done
     fi
 }
+function shutdownproc(){
+    if [ $MEMO == '']
+    then
+        echo '' > ${ZDOTDIR}/MEMO.txt
+    else
+        echo $MEMO >> ${ZDOTDIR}/MEMO.txt
+    fi
+    exit 0
+}
+function @reload(){
+    MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+}
+trap "shutdownproc" EXIT INT
+MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+
