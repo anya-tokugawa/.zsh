@@ -31,7 +31,7 @@ function @(){
     fi
 }
 function shutdownproc(){
-    if [ $MEMO == '']
+    if test  $MEMO = ''
     then
         echo '' > ${ZDOTDIR}/MEMO.txt
     else
