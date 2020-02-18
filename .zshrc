@@ -12,7 +12,7 @@
             fi
         fi
     }
-    zsh_update
+    zsh_update &! # bash の & disown 相当
 : "Define Function"
 cd $HOME
 function chpwd() {
@@ -30,12 +30,44 @@ function @(){
         done
     fi
 }
+
+zshaddhistory() {
+    local line=${1%%$'\n'}
+    local cmd=${line%% *}
+	test $(echo $line|grep -o '\n'|wc -l) -lt 3
+
+    # 以下の条件をすべて満たすものだけをヒストリに追加する
+#    [[ ${#line} -ge 5
+#       && ${cmd} != (l|l[sal])
+#       && ${cmd} != (c|cd)
+#       && ${cmd} != (m|man)
+#   ]]
+}
+
+
 function shutdownproc(){
-    if test  $MEMO = ''
+    if test "$MEMO" = ""
     then
         echo '' > ${ZDOTDIR}/MEMO.txt
     else
-        echo $MEMO >> ${ZDOTDIR}/MEMO.txt
+        for i in $(echo $MEMO | xargs)
+        do
+            local exist_flag=0
+            for x in $(cat ${ZDOTDIR}/MEMO.txt | xargs)
+            do
+                if test "$i" = "$x"
+                then
+                    exist_flag=1
+                fi
+            done
+            if test $exist_flag -eq 0
+            then
+                 echo "memo: add - $i"
+                 echo $i >> ${ZDOTDIR}/MEMO.txt
+            else
+                echo "memo: exist - $i"
+            fi
+        done
     fi
     exit 0
 }
