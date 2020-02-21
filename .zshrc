@@ -45,7 +45,7 @@ zshaddhistory() {
 }
 
 
-function shutdownproc(){
+function memo_write(){
     if test "$MEMO" = ""
     then
         echo '' > ${ZDOTDIR}/MEMO.txt
@@ -69,11 +69,12 @@ function shutdownproc(){
             fi
         done
     fi
-    exit 0
 }
+alias @write='memo_write'
+
 function @reload(){
-    MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+  export  MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
-trap "shutdownproc" EXIT INT
-MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+trap "memo_write" EXIT INT
+declare -g  MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
 
