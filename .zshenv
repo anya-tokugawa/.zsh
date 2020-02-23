@@ -17,15 +17,10 @@ export HISTSIZE=1000
 export SAVEHIST=10000
 
 : "PATH"
-export PATH=$PATH":"$(cat << EOF | xargs | tr ' ' ':'
-/home/linuxbrew/.brew/bin
-/home/linuxbrew/.linuxbrew/bin
-$HOME/.brew/bin
-$HOME/.linux/brew/bin
-$HOME/local/bin
-$HOME/.local/bin
-EOF
-)
+for i in `ls -1 --file-type "${ZDOTDIR}/export.d"`
+do
+    source "${ZDOTDIR}/export.d/${i}"
+done
 
 : "HOST ALIASES"
 export HOSTALIASES="~/.hosts"
