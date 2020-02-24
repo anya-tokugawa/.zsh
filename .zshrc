@@ -64,6 +64,12 @@ function cat(){
     fi
 }
 
+function lscd {
+    local dir="$( ls -1A | grep "/" |  peco )"
+    if [ ! -z "$dir" ] ; then
+        cd "$dir"
+    fi
+}
 function memo_write(){
     if test "$MEMO" = ""
     then
