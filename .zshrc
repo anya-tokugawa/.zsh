@@ -52,16 +52,15 @@ function cat(){
         if [ "`file $1 | grep 'text'`" ];
         then
             case "$1" in
-                *.csv ) column -ts, $1 ;;
-                *.md ) mdcat $1 ;;
-                *) /bin/cat $1 ;;
+                *.csv ) column -ts, $1 | nl ;;
+                *.md ) mdcat $1 | nl ;;
+                *) /bin/cat $1 | nl ;;
             esac
         else
-            echo "code: 2"
-            /bin/cat $1
+            /bin/cat $1 | nl
         fi
     else
-       /bin/cat $@
+       /bin/cat  $@ | nl
     fi
 }
 

@@ -25,3 +25,5 @@
     alias bye='loginctl lock-session'
 : "history"
     alias history-all='history -E 1'
+: "Line Display"
+    alias nl='nl -w3 -nrz -s":| "'
