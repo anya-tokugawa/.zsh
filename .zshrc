@@ -20,14 +20,24 @@ function chpwd() {
 } # auto display list directory after changed director
 
 function @(){
-    if [ $# -eq 0 ];
+    if [ $# -eq 0 ]
     then
+        # 空で指定したらリセット
         unset MEMO
         return
     else
         for text in $@
         do
-            declare -g MEMO="${MEMO} ${text}"
+            #頭に-がついてたら削除。
+            if test $(echo "$text" | grep '^-' )
+            then
+                local keywd=`echo $text | sed -e 's/^-//'`
+                declare -g MEMO=`echo $MEMO | sed "s/\s${keywd}\s/\ /"`
+                echo "memo buffer removed: $keywd"
+            else
+                declare -g MEMO="${MEMO} ${text}"
+                echo "memo buffer added: ${text}"
+            fi
         done
     fi
 }
@@ -73,12 +83,14 @@ function lscd {
 function memo_write(){
     if test "$MEMO" = ""
     then
+        # 変数が空ならば、リセットする。
         echo '' > ${ZDOTDIR}/MEMO.txt
     else
         for i in $(echo $MEMO | xargs)
         do
             local exist_flag=0
-            for x in $(cat ${ZDOTDIR}/MEMO.txt | xargs)
+            # 存在チェック
+            for x in $(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
             do
                 if test "$i" = "$x"
                 then
@@ -86,11 +98,22 @@ function memo_write(){
                 fi
             done
             if test $exist_flag -eq 0
-            then
+            then #存在しないならば
                  echo "memo: add - $i"
                  echo $i >> ${ZDOTDIR}/MEMO.txt
             else
                 echo "memo: exist - $i"
+            fi
+        done
+        # ファイルにあるが、変数に存在しない文字列を削除
+        local MEMO_LIST=`echo $MEMO | tr ' ' '\n'`
+        for i in $(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
+        do
+            # ファイルのMEMO_LISTをGrep(完全一致）して、完全一致しなければ（Revirse) Grepで行削除
+            if test ! "$( echo $MEMO_LIST | grep -x $i)" 
+            then
+                grep -v "^${i}" ${ZDOTDIR}/MEMO.txt | tee ${ZDOTDIR}/MEMO.txt > /dev/null
+                test "$?" -eq 0  && echo "memo: removed - $i"
             fi
         done
     fi
@@ -98,8 +121,8 @@ function memo_write(){
 alias @write='memo_write'
 
 function @reload(){
-  export  MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+  export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
 trap "memo_write" EXIT INT
-declare -g  MEMO=$(cat ${ZDOTDIR}/MEMO.txt | xargs)
+declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
