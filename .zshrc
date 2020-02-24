@@ -31,12 +31,22 @@ function @(){
             #頭に-がついてたら削除。
             if test $(echo "$text" | grep '^-' )
             then
-                local keywd=`echo $text | sed -e 's/^-//'`
-                declare -g MEMO=`echo $MEMO | sed "s/\s${keywd}\s/\ /"`
+                local keywd=`echo  $text | sed -e 's/^-//'`
+                declare -g MEMO=`echo $MEMO | sed "s/\s$keywd/ /" | sed "s/${keywd}\s//"`
                 echo "memo buffer removed: $keywd"
             else
-                declare -g MEMO="${MEMO} ${text}"
-                echo "memo buffer added: ${text}"
+                local exist_flag=0
+                for i in $(echo $MEMO | xargs)
+                do
+                    test "$i" = "$text" && exist_flag=1 && break
+                done
+                if test $exist_flag -eq 0
+                then
+                    declare -g MEMO="${MEMO} ${text}"
+                    echo "memo buffer added: ${text}"
+                else
+                    echo "memo buffer exist: ${text}"
+                fi
             fi
         done
     fi
@@ -57,20 +67,29 @@ zshaddhistory() {
 
 # 2020-02-24: catコマンドを拡張子別に変更
 function cat(){
-    if [ $# -eq 1 ];
+    if test "`echo $@ | grep 'EOF' | grep '<<' `"  -eq 0
     then
-        if [ "`file $1 | grep 'text'`" ];
-        then
-            case "$1" in
-                *.csv ) column -ts, $1 | nl ;;
-                *.md ) mdcat $1 | nl ;;
-                *) /bin/cat $1 | nl ;;
-            esac
-        else
-            /bin/cat $1 | nl
-        fi
+        # ヒアドキュメント対策
+        /bin/cat $@
+        return
     else
-       /bin/cat  $@ | nl
+        if [ $# -eq 1 ];
+        then
+            if [ "`file $1 | grep 'text'`" ];
+            then
+                case "$1" in
+                    *.csv ) column -ts, $1 | nl ;;
+                    *.md ) mdcat $1 | nl ;;
+                    *) /bin/cat $1 | nl ;;
+                esac
+            else
+                echo "Type 1"
+                /bin/cat $1 | nl
+            fi
+        else
+            echo "Type 3"
+            /bin/cat  $@ | nl
+        fi
     fi
 }
 
@@ -110,7 +129,7 @@ function memo_write(){
         for i in $(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
         do
             # ファイルのMEMO_LISTをGrep(完全一致）して、完全一致しなければ（Revirse) Grepで行削除
-            if test ! "$( echo $MEMO_LIST | grep -x $i)" 
+            if test ! "$( echo $MEMO_LIST | grep -x $i)"
             then
                 grep -v "^${i}" ${ZDOTDIR}/MEMO.txt | tee ${ZDOTDIR}/MEMO.txt > /dev/null
                 test "$?" -eq 0  && echo "memo: removed - $i"
