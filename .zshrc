@@ -18,6 +18,7 @@ cd $HOME
 function chpwd() {
     ls -F
 } # auto display list directory after changed director
+
 function @(){
     if [ $# -eq 0 ];
     then
@@ -44,6 +45,25 @@ zshaddhistory() {
 #   ]]
 }
 
+# 2020-02-24: catコマンドを拡張子別に変更
+function cat(){
+    if [ $# -eq 1 ];
+    then
+        if [ "`file $1 | grep 'text'`" ];
+        then
+            case "$1" in
+                *.csv ) column -ts, $1 ;;
+                *.md ) mdcat $1 ;;
+                *) /bin/cat $1 ;;
+            esac
+        else
+            echo "code: 2"
+            /bin/cat $1
+        fi
+    else
+       /bin/cat $@
+    fi
+}
 
 function memo_write(){
     if test "$MEMO" = ""

@@ -40,7 +40,7 @@ declare -a -x IP_ADDRESSES
 IP_ADDRESSES=$(ip a | grep inet | grep -ve inet6 -e 127.0.0. | awk '{print $2}'| xargs)
 
 : "PROMPT"
-PROMPT="%K{black}%F{3}${HOST} %F{4}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
+PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
 %K{0}%F{7} [%~] %#%K{reset}%F{reset} "
 RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
 : "OUTPUT DISPLAY"

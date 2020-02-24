@@ -21,6 +21,7 @@
     alias e='vim'
     alias g='subl'
     alias of='libreoffice'
+    alias zsh-reload='source ~/.zshenv'
     alias bye='loginctl lock-session'
 : "history"
     alias history-all='history -E 1'
