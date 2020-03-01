@@ -153,4 +153,6 @@ function @reload(){
 trap "memo_write" EXIT INT
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
+# Show Latest Date
+echo "Latest Update -> $(git log | head -n6 | grep 'Date' | sed 's/Date:   //')"
 
