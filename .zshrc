@@ -4,14 +4,15 @@
 # - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
 # - よって、.zshenv だと上書きされてしまう事象（CentOS 7)
 PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
-%K{0}%F{7} [%~] %#%K{reset}%F{reset} "
+%K{0} --wor%F{7} [%~] %#%K{reset}%F{reset} "
 RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
 
 : "Check Update"
 	function zsh_update() {
-		cd $HOME/.zsh
-        OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags)
-        git pull origin > /dev/null 2>&1
+        local GIT_DIR=$ZDOTDIR
+        local GIT_WORK_TREE=$ZDOTDIR
+        OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )
+        git pull  > /dev/null 2>&1
         ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags)
         if [[ $? -eq 0 ]]
         then
@@ -154,5 +155,4 @@ trap "memo_write" EXIT INT
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 # Show Latest Date
-echo "Latest Update -> $(git log | head -n6 | grep 'Date' | sed 's/Date:   //')"
-
+echo "Latest Update -> $(git log -C ${ZDOTDIR}| head -n6 | grep 'Date' | sed 's/Date:   //')"
