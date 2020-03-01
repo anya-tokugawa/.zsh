@@ -138,7 +138,8 @@ function memo_write(){
     fi
 }
 alias @write='memo_write'
-
+# For Hyper Terminal
+function title() { echo -e "\033]0;${1:?please specify a title}\007" ; }
 function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
