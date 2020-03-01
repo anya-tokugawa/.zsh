@@ -6,6 +6,7 @@
 PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
 %K{0}%F{7} [%~] %#%K{reset}%F{reset} "
 RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
+
 : "Check Update"
 	function zsh_update() {
 		cd $HOME/.zsh
@@ -20,93 +21,90 @@ RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
             fi
         fi
     }
+    # バックグラウンドで実行
     zsh_update &! # bash の & disown 相当
 : "Define Function"
-cd $HOME
-function chpwd() {
-    ls -F
-} # auto display list directory after changed director
-
-function @(){
-    if [ $# -eq 0 ]
-    then
-        # 空で指定したらリセット
-        unset MEMO
-        return
-    else
-        for text in $@
-        do
-            #頭に-がついてたら削除。
-            if test $(echo "$text" | grep '^-' )
-            then
-                local keywd=`echo  $text | sed -e 's/^-//'`
-                declare -g MEMO=`echo $MEMO | sed "s/\s$keywd/ /" | sed "s/${keywd}\s//"`
-                echo "memo buffer removed: $keywd"
-            else
-                local exist_flag=0
-                for i in $(echo $MEMO | xargs)
-                do
-                    test "$i" = "$text" && exist_flag=1 && break
-                done
-                if test $exist_flag -eq 0
+    function chpwd() {
+        ls -F
+    }
+: "Note Command"
+    function @(){
+        if [ $# -eq 0 ]
+        then
+            # 空で指定したらリセット
+            unset MEMO
+            return
+        else
+            for text in $@
+            do
+                #頭に-がついてたら削除。
+                if test $(echo "$text" | grep '^-' )
                 then
-                    declare -g MEMO="${MEMO} ${text}"
-                    echo "memo buffer added: ${text}"
+                    local keywd=`echo  $text | sed -e 's/^-//'`
+                    declare -g MEMO=`echo $MEMO | sed "s/\s$keywd/ /" | sed "s/${keywd}\s//"`
+                    echo "memo buffer removed: $keywd"
                 else
-                    echo "memo buffer exist: ${text}"
+                    local exist_flag=0
+                    for i in $(echo $MEMO | xargs)
+                    do
+                        test "$i" = "$text" && exist_flag=1 && break
+                    done
+                    if test $exist_flag -eq 0
+                    then
+                        declare -g MEMO="${MEMO} ${text}"
+                        echo "memo buffer added: ${text}"
+                    else
+                        echo "memo buffer exist: ${text}"
+                    fi
                 fi
-            fi
-        done
-    fi
-}
-
+            done
+        fi
+    }
+: "zshaddhistory Process"
 zshaddhistory() {
     local line=${1%%$'\n'}
     local cmd=${line%% *}
-	test $(echo $line|grep -o '\n'|wc -l) -lt 3
-
-    # 以下の条件をすべて満たすものだけをヒストリに追加する
-#    [[ ${#line} -ge 5
-#       && ${cmd} != (l|l[sal])
-#       && ${cmd} != (c|cd)
-#       && ${cmd} != (m|man)
-#   ]]
+    #　三行以下のコマンドのみ格納
+	test $(echo ${line} |grep -o '\n' |wc -l)  -lt 3
 }
 
 # 2020-02-24: catコマンドを拡張子別に変更
 function cat(){
+    # ヒアドキュメント判定
     if test "`echo $@ | grep 'EOF' | grep '<<' `"  -eq 0
     then
-        # ヒアドキュメント対策
         /bin/cat $@
         return
     else
+        # 複数ファイルを判定しない
         if [ $# -eq 1 ];
         then
+            # PlainTextなファイル
             if [ "`file $1 | grep 'text'`" ];
             then
+                # 拡張子別に振り分け
                 case "$1" in
                     *.csv ) column -ts, $1 | nl ;;
-                    *.md ) mdcat $1 | nl ;;
-                    *) /bin/cat $1 | nl ;;
+                    *.md  ) mdcat $1 | nl ;;
+                    *     ) /bin/cat $1 | nl ;;
                 esac
             else
-                echo "Type 1"
                 /bin/cat $1 | nl
             fi
         else
-            echo "Type 3"
             /bin/cat  $@ | nl
         fi
     fi
 }
 
+# Pecoを用いたlisted Change Directory.
 function lscd {
     local dir="$( ls -1A | grep "/" |  peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
 }
+# Memo書き込み関数(alias @write)
 function memo_write(){
     if test "$MEMO" = ""
     then
@@ -146,11 +144,13 @@ function memo_write(){
     fi
 }
 alias @write='memo_write'
+
 # For Hyper Terminal
 function title() { echo -e "\033]0;${1:?please specify a title}\007" ; }
 function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
 trap "memo_write" EXIT INT
+# ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
