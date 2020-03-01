@@ -1,3 +1,11 @@
+: "PROMPT"
+# 20200301: 
+# - /etc/zshrc にPROMPT変数が定義されている。
+# - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
+# - よって、.zshenv だと上書きされてしまう事象（CentOS 7)
+PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
+%K{0}%F{7} [%~] %#%K{reset}%F{reset} "
+RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
 : "Check Update"
 	function zsh_update() {
 		cd $HOME/.zsh
