@@ -152,5 +152,15 @@ function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
 trap "memo_write" EXIT INT
+
+#Custom Config
+for i in `ls -1 --file-type "${ZDOTDIR}/custom.d"`
+do
+    source "${ZDOTDIR}/custom.d/${i}"
+done
+
+
+
+
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
