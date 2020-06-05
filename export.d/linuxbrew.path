@@ -1,7 +1,0 @@
-export HOMEBREW_PREFIX="/home/eric/.linuxbrew/Homebrew";
-export HOMEBREW_CELLAR="/home/eric/.linuxbrew/Homebrew/Cellar";
-export HOMEBREW_REPOSITORY="/home/eric/.linuxbrew/Homebrew";
-export PATH="/home/eric/.linuxbrew/Homebrew/bin:/home/eric/.linuxbrew/Homebrew/sbin${PATH+:$PATH}";
-export MANPATH="/home/eric/.linuxbrew/Homebrew/share/man${MANPATH+:$MANPATH}:";
-export INFOPATH="/home/eric/.linuxbrew/Homebrew/share/info${INFOPATH+:$INFOPATH}";
-
