@@ -1,8 +1,8 @@
 : "PROMPT"
-# 20200301: 
-# - /etc/zshrc $B$K(BPROMPT$BJQ?t$,Dj5A$5$l$F$$$k!#(B
-# - ${ZDOTDIR}/.zshenv $B$N$"$H$K(B /etc/zshrc$B$rFI$_9~$`(B
-# - $B$h$C$F!"(B.zshenv $B$@$H>e=q$-$5$l$F$7$^$&;v>]!J(BCentOS 7)
+# 20200301:
+# - /etc/zshrc にPROMPT変数が定義されている。
+# - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
+# - よって、.zshenv だと上書きされてしまう事象（CentOS 7)
 
 #PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
 #%K{0} %F{7} [%~] %#%K{reset}%F{reset} "
@@ -49,8 +49,8 @@ echo "----------------------------------"
             fi
         fi
     }
-    # $B%P%C%/%0%i%&%s%I$G<B9T(B
-    zsh_update &! # bash $B$N(B & disown $BAjEv(B
+    # バックグラウンドで実行
+    zsh_update &! # bash の & disown 相当
 : "Define Function"
     function chpwd() {
         ls -F
@@ -59,13 +59,13 @@ echo "----------------------------------"
     function @(){
         if [ $# -eq 0 ]
         then
-            # $B6u$G;XDj$7$?$i%j%;%C%H(B
+            # 空で指定したらリセット
             unset MEMO
             return
         else
             for text in $@
             do
-                #$BF,$K(B-$B$,$D$$$F$?$i:o=|!#(B
+                #頭に-がついてたら削除。
                 if test $(echo "$text" | grep '^-' )
                 then
                     local keywd=`echo  $text | sed -e 's/^-//'`
@@ -92,25 +92,25 @@ echo "----------------------------------"
 zshaddhistory() {
     local line=${1%%$'\n'}
     local cmd=${line%% *}
-    #$B!!;09T0J2<$N%3%^%s%I$N$_3JG<(B
+    #　三行以下のコマンドのみ格納
 	test $(echo ${line} |grep -o '\n' |wc -l)  -lt 3
 }
 
-# 2020-02-24: cat$B%3%^%s%I$r3HD%;RJL$KJQ99(B
+# 2020-02-24: catコマンドを拡張子別に変更
 function cat(){
-    # $B%R%"%I%-%e%a%s%HH=Dj(B
+    # ヒアドキュメント判定
     if test "`echo $@ | grep 'EOF' | grep '<<' `"  -eq 0
     then
         /bin/cat $@
         return
     else
-        # $BJ#?t%U%!%$%k$rH=Dj$7$J$$(B
+        # 複数ファイルを判定しない
         if [ $# -eq 1 ];
         then
-            # PlainText$B$J%U%!%$%k(B
+            # PlainTextなファイル
             if [ "`file $1 | grep 'text'`" ];
             then
-                # $B3HD%;RJL$K?6$jJ,$1(B
+                # 拡張子別に振り分け
                 case "$1" in
                     *.csv ) column -ts, $1 | nl ;;
                     *.md  ) mdcat $1 | nl ;;
@@ -125,24 +125,24 @@ function cat(){
     fi
 }
 
-# Peco$B$rMQ$$$?(Blisted Change Directory.
+# Pecoを用いたlisted Change Directory.
 function lscd {
     local dir="$( ls -1A | grep "/" |  peco )"
     if [ ! -z "$dir" ] ; then
         cd "$dir"
     fi
 }
-# Memo$B=q$-9~$_4X?t(B(alias @write)
+# Memo書き込み関数(alias @write)
 function memo_write(){
     if test "$MEMO" = ""
     then
-        # $BJQ?t$,6u$J$i$P!"%j%;%C%H$9$k!#(B
+        # 変数が空ならば、リセットする。
         echo '' > ${ZDOTDIR}/MEMO.txt
     else
         for i in $(echo $MEMO | xargs)
         do
             local exist_flag=0
-            # $BB8:_%A%'%C%/(B
+            # 存在チェック
             for x in $(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
             do
                 if test "$i" = "$x"
@@ -151,18 +151,18 @@ function memo_write(){
                 fi
             done
             if test $exist_flag -eq 0
-            then #$BB8:_$7$J$$$J$i$P(B
+            then #存在しないならば
                  echo "memo: add - $i"
                  echo $i >> ${ZDOTDIR}/MEMO.txt
             else
                 echo "memo: exist - $i"
             fi
         done
-        # $B%U%!%$%k$K$"$k$,!"JQ?t$KB8:_$7$J$$J8;zNs$r:o=|(B
+        # ファイルにあるが、変数に存在しない文字列を削除
         local MEMO_LIST=`echo $MEMO | tr ' ' '\n'`
         for i in $(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
         do
-            # $B%U%!%$%k$N(BMEMO_LIST$B$r(BGrep($B40A40lCW!K$7$F!"40A40lCW$7$J$1$l$P!J(BRevirse) Grep$B$G9T:o=|(B
+            # ファイルのMEMO_LISTをGrep(完全一致）して、完全一致しなければ（Revirse) Grepで行削除
             if test ! "$( echo $MEMO_LIST | grep -x $i)"
             then
                 grep -v "^${i}" ${ZDOTDIR}/MEMO.txt | tee ${ZDOTDIR}/MEMO.txt > /dev/null
@@ -189,5 +189,5 @@ done
 
 
 
-# $B%U%!%$%k>e$N%a%b$r;2>H(B
+# ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
