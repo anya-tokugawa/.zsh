@@ -18,11 +18,11 @@ case "$TERM" in
 	if test "$(whoami)" == "root"
 	then
 		PROMPT="
-%F{154}${HOST}:%F{207}${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{reset}
+%F{154}${HOST}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
 %F{250}%T %F{207}#> %F{reset} "
 	else
 		PROMPT="
-%F{154}${HOST}:%F{207}${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{reset}
+%F{154}${HOST}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
 %F{250}%T %F{207}-> %F{reset} "
 	fi
 	}
