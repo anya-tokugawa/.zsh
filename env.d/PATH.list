@@ -3,5 +3,4 @@ $HOME/.local/bin
 $HOME/local/bin
 EOF
 )
-
-echo $PATH_LIST
+export PATH="$PATH_LIST:$PATH"

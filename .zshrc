@@ -3,14 +3,41 @@
 # - /etc/zshrc にPROMPT変数が定義されている。
 # - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
 # - よって、.zshenv だと上書きされてしまう事象（CentOS 7)
-PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
-%K{0} %F{7} [%~] %#%K{reset}%F{reset} "
-RPROMPT="%K{black}%F{red}"'${MEMO}'"%F{reset}%K{reset}"
 
+#PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
+#%K{0} %F{7} [%~] %#%K{reset}%F{reset} "
+#
+#
+
+case "$TERM" in
+    xterm*|kterm*|rxvt*)
+	function precmd () {
+	vcs_info
+        # Shorten the path of pwd
+	PREPWD=`pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!'`
+	if test "$(whoami)" == "root"
+	then
+		PROMPT="
+%F{154}${HOST}:%F{207}${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{reset}
+%F{250}%T %F{207}#> %F{reset} "
+	else
+		PROMPT="
+%F{154}${HOST}:%F{207}${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{reset}
+%F{250}%T %F{207}-> %F{reset} "
+	fi
+	}
+    ;;
+esac
+
+RPROMPT="%F{044}"'${MEMO}'"%F{reset}"
+
+# INFO
+echo "$HOST - $IP_ADDRESSES"
+echo "----------------------------------"
 : "Check Update"
 	function zsh_update() {
         cd  $ZDOTDIR
-        echo "Latest Update -> $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
+        echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
         OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags   )
         git pull  > /dev/null 2>&1
         ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )

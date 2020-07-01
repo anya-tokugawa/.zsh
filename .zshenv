@@ -8,8 +8,6 @@ zstyle ':vcs_info:git:*' stagedstr "%F{yellow} [STAGED]%F{red}"
 zstyle ':vcs_info:git:*' unstagedstr "%F{yellow} [UNSTAGED] %F{red}"
 zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
-precmd () { vcs_info }
-
 
 : "ZSH HISTORY"
 export HISTFILE=${ZDOTDIR}/.zsh_history
