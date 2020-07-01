@@ -4,9 +4,7 @@ My ZSH Configuration
 
 ## Dependency(Alias)
 
-- linuxbrew
- - [Peco](https://github.com/peco/peco)
- - [mdcat](https://github.com/lunaryorn/mdcat)
+- zsh
 
 ## Install
 
