@@ -181,9 +181,9 @@ function @reload(){
 trap "memo_write" EXIT INT
 
 #Custom Config
-for i in `ls -1 --file-type "${ZDOTDIR}/custom.d"`
+for i in `ls -1 --file-type "${ZDOTDIR}/custom-enable.d"`
 do
-    source "${ZDOTDIR}/custom.d/${i}"
+    source "${ZDOTDIR}/custom-enable.d/${i}"
 done
 
 

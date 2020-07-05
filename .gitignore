@@ -1,5 +1,5 @@
 MEMO.txt
 .zsh_history
-custom.d/*
 .zcompdump
+custom-enable.d/*
 
