@@ -1,5 +1,5 @@
-MEMO.txt
-.zsh_history
-.zcompdump
-custom-enable.d/*
-
+/MEMO.txt
+/.zsh_history
+/.zcompdump
+/custom-enable.d/*
+!/custom-enable.d/
