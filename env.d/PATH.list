@@ -1,4 +1,5 @@
 PATH_LIST=$(cat << EOF | xargs | sed -e 's/\ /:/g'
+$HOME/bin
 $HOME/.local/bin
 $HOME/local/bin
 EOF
