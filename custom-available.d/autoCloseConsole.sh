@@ -2,7 +2,7 @@
 # 30s * 4 -> 120s = 2min
 A3C_STARTUP=1
 # CheckBowlingTime
-BOW_TIME=10
+BOW_TIME=30
 CHECK_BOW=4
 
 

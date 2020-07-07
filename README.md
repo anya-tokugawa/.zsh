@@ -19,40 +19,43 @@ chsh -s /bin/zsh
 
 ## Feature
 
-### Design
+### Memo Feature
+`@`Command is for prompt-note.
+```sh
+% @ Hello World
+memo buffer added: Hello
+memo buffer added: World
+%                                Hello World
+% @ -Hello                       Hello World
+memo buffer removed: Hello
+%                                      World
+% @ GoodMorning World                  World
+memo buffer added: GoodMorning
+memo buffer exist: World
+%                           World GoodMorning
+% @ -World
+% @write                          GoodMorning
+memo: add - GoodMorning
+% cat ~/.zsh/MEMO.txt
+001:| GoodMorning
+% @write
+memo: exist - GoodMorning
+```
+
+### Other Plugins
+
+#### AutoCloseConsoleChecker(A3C)
+If it is not running when bowling 4 count per 30sec,
+auto-close terminal(`kill -9 $TERMINAL_PID`)
+
+- `autoexit` ... enable A3C
+- `noautoexit` ... disable A3C
+
+#### WSL - Windows StartupDir Detection
+If you run WSL by AutoHotKey(etc...) at Windows StartupDir,
+this feature detected and change-directory to HomeDir.
+
+## Design
 
 ![zsh design 20200701](lib/zsh.jpg)
 
-### RPROMPT MEMO
-``` bash
- [~] % : RPROMPT_MEMO
-DPC00 <172.22.1.61/24>
- [~] % : ADD && @ Hello World
-memo buffer added: Hello
-memo buffer added: World
-DPC00 <172.22.1.61/24>
- [~] % : REMOVE && -Hello                                                                             Hello World
-zsh: command not found: -Hello
-DPC00 <172.22.1.61/24>
- [~] % : REMOVE &&  @ -Hello                                                                          Hello World
-memo buffer removed: Hello
-DPC00 <172.22.1.61/24>
- [~] % : WRITE && @write                                                                                    World
-memo: add - World
-DPC00 <172.22.1.61/24>
- [~] %                                                                                                      World
-DPC00 <172.22.1.61/24>
- [~] % : IF EXIST && @ World                                                                                World
-memo buffer exist: World
-DPC00 <172.22.1.61/24>
- [~] % : WRITE IF EXIST && @write                                                                           World
-memo: exist - World
-DPC00 <172.22.1.61/24>
-
-# --------------------------------
-
-DPC00 <172.22.1.61/24>
- [~] % : SAVE LOCATION && cat .zsh/MEMO.txt                                                                              Test1 Test2
-001:| Test1
-002:| Test2
-DPC00 <172.22.1.61/24>
