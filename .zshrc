@@ -31,6 +31,8 @@ esac
 
 RPROMPT="%F{044}"'${MEMO}'"%F{reset}"
 
+ZTTY_PATH=$TTY
+
 # INFO
 echo "$HOST - $IP_ADDRESSES"
 echo "----------------------------------"
@@ -45,7 +47,7 @@ echo "----------------------------------"
         then
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
-                echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)"
+                echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)" > $ZTTY_PATH
             fi
         fi
     }
