@@ -31,7 +31,6 @@ esac
 
 RPROMPT="%F{044}"'${MEMO}'"%F{reset}"
 
-ZTTY_PATH=$TTY
 
 # INFO
 echo "$HOST - $IP_ADDRESSES"
@@ -41,13 +40,16 @@ echo "----------------------------------"
         cd  $ZDOTDIR
         echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
         OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags   )
-        git pull  > /dev/null 2>&1
-        ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )
+        (git pull  > /dev/null 2>&1) && \
+          ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )
         if [[ "$ZSH_CONF_VERSION" != "" ]]
         then
+            echo "DEBUG: OLD $OLD_ZSH_CONF_VERSION"
+            echo "DEBUG:  $ZSH_CONF_VERSION"
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
-                echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)" > $ZTTY_PATH
+                echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)"
+                echo ""
             fi
         fi
     }
