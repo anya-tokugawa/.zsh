@@ -104,6 +104,10 @@ d    un || untagged ...            -organised
 
 - else: `dstask [other_args]`
 
+#### Others
+
+- custom terminal startup shellscript can store to `custom.d/`(git ignored)
+
 
 ## Design
 

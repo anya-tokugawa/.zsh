@@ -3,3 +3,5 @@
 /.zcompdump
 /custom-enable.d/*
 !/custom-enable.d/
+/custom.d/*
+!/custom.d/
