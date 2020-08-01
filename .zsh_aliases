@@ -16,7 +16,6 @@
     alias ipaddr='echo $IP_ADDRESS'
     alias trec='npx terminalizer'
 : "Shortcut"
-    alias d='dstask'
     alias vi='vim'
     alias e='vim'
     alias g='subl'
