@@ -43,7 +43,7 @@ echo "----------------------------------"
         OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags   )
         git pull  > /dev/null 2>&1
         ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )
-        if [[ $? -eq 0 ]]
+        if [[ "$ZSH_CONF_VERSION" != "" ]]
         then
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
