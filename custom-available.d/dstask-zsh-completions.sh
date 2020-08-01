@@ -1,8 +1,8 @@
 #compdef pass
 #autoload
 
-_dstask() {
+_dcomp() {
     compadd $(dstask _completions "${words[@]}")
 }
 
-compdef _dstask dstask
+compdef _dcomp d
