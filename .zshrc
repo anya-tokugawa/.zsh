@@ -39,13 +39,11 @@ echo "----------------------------------"
 	function zsh_update() {
         cd  $ZDOTDIR
         echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
-        OLD_ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags   )
+        OLD_ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
         (git pull  > /dev/null 2>&1) && \
-          ZSH_CONF_VERSION=$(git describe --abbrev=0 --tags  )
+          ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
         if [[ "$ZSH_CONF_VERSION" != "" ]]
         then
-            echo "DEBUG: OLD $OLD_ZSH_CONF_VERSION"
-            echo "DEBUG:  $ZSH_CONF_VERSION"
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
                 echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)"
