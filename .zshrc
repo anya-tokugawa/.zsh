@@ -53,7 +53,8 @@ echo "----------------------------------"
     zsh_update &! # bash の & disown 相当
 : "Define Function"
     function chpwd() {
-        exa
+        # if exist `exa -> aliased `ls` to `exa`
+        ls -F
     }
 : "Note Command"
     function @(){
