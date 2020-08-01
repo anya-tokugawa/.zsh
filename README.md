@@ -5,6 +5,7 @@ My ZSH Configuration
 ## Abst.
 
 - zsh my settings
+- automatic update conf using `git pull` in background.
 - no third-party extensions(e.g. oh-my-zsh)
 - custom-shell-extension in `custom-available.d/` ( symlink to `custom-enable.d/`)
 - terminal short note (called `memo`)  extension
