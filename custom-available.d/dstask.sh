@@ -3,7 +3,7 @@ d() {
   then
     shift
     case "$2" in
-      "pro" || "projects" )
+      "pr" || "pro" || "projects" )
         dstask show-projects ;;
       "ta" || "tags" )
         dstask show-tags ;;
@@ -13,9 +13,9 @@ d() {
         dstask show-paused ;;
       "op")
         dstask show-open ;;
-      "re")
+      "re" || "resolved" )
         dstask show-resolved ;;
-      "unorganised" || "untagged" || "unproj" || "unprojects" )
+      "un" || "unorganised" || "untagged" || "unproj" || "unprojects" )
         dstask show-unorganised ;;
     esac
   else
