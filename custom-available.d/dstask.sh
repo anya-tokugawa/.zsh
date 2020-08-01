@@ -1,22 +1,23 @@
 d() {
   if [[ "$1" ==  "sh" || "$1" == "show" ]]
   then
-    shift
     case "$2" in
-      "pr" || "pro" || "projects" )
+      "pr" | "pro" | "projects" )
         dstask show-projects ;;
-      "ta" || "tags" )
+      "ta" | "tags" )
         dstask show-tags ;;
-      "ac" || "now" )
+      "ac" | "now" )
         dstask show-active ;;
-      "pa" || "stopped" )
+      "pa" | "stopped" )
         dstask show-paused ;;
       "op")
         dstask show-open ;;
-      "re" || "resolved" )
+      "re" | "resolved" )
         dstask show-resolved ;;
-      "un" || "unorganised" || "untagged" || "unproj" || "unprojects" )
+      "un" | "unorganised" | "untagged" | "unproj" | "unprojects" )
         dstask show-unorganised ;;
+      * )
+        echo "dstask.sh: $2 - no_opt defined"
     esac
   else
     dstask "$@"
