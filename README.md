@@ -16,13 +16,41 @@ My ZSH Configuration
 
 ## Install
 
-```bash
-git clone https://github.com/Eric-lightning/.zsh $HOME/
-ln -s $HOME/.zsh/.zshenv $HOME/
-cd $HOME/.zsh
-chmod x setup.sh
-./setup.sh
-chsh -s /bin/zsh
+Only 5 steps.
+
+```sh
+cd
+
+git clone https://github.com/Eric-lightning/.zsh
+
+cd ~/.zsh
+
+chmod x INSTALL.sh
+
+./INSTALL.sh
+
+# IF ZSH WANT TO BE DEFAULT SHELL.
+sudo chsh -s /bin/zsh
+
+#-----------------------------
+# NO_SUDO
+
+cat <<EOF > ~/.bash_profile
+/path/to/zsh
+export ZSH_END=1
+
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+EOF
+
+cat <<EOF > ~/.bashrc
+if [[ $ZSH_END = 1 ]];
+then
+ exit
+fi
+EOF
+
 ```
 
 ## Feature
