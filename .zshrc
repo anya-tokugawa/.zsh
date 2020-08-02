@@ -188,6 +188,11 @@ for i in $(/bin/ls -1 "${ZDOTDIR}/custom-enable.d")
 do
     source "${ZDOTDIR}/custom-enable.d/${i}"
 done
+# Custom.d
+for i in $(/bin/ls -1 "${ZDOTDIR}/custom.d")
+do
+    source "${ZDOTDIR}/custom.d/${i}"
+done
 
 
 
