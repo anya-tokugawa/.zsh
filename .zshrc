@@ -29,7 +29,7 @@ case "$TERM" in
     ;;
 esac
 
-RPROMPT="%F{044}"'${MEMO}'"%F{reset}"
+RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
 
 
 # INFO
