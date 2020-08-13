@@ -1,4 +1,15 @@
 d() {
+  if [[ "$1" ==  "" ]]
+  then
+    dstask show-unorganised
+    echo "Attension: Default 'dstask' run as 'd all'"
+    return 0
+  fi
+  if [[ "$1" ==  "all" ]]
+  then
+    dstask
+    return 0
+  fi
   if [[ "$1" ==  "sh" || "$1" == "show" ]]
   then
     case "$2" in
