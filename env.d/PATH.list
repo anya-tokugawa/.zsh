@@ -1,6 +1,7 @@
 PATH_LIST=$(cat << EOF | xargs | sed -e 's/\ /:/g'
 $HOME/bin
 $HOME/.local/bin
+$HOME/.local/latex/bin
 $HOME/local/bin
 $HOME/.cargo/bin/
 EOF
