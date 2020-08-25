@@ -4,6 +4,7 @@ $HOME/.local/bin
 $HOME/.local/latex/bin
 $HOME/local/bin
 $HOME/.cargo/bin/
+$HOME/.nesc/bin
 EOF
 )
 export PATH="$PATH_LIST:$PATH"
