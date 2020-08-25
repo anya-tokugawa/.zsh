@@ -4,7 +4,8 @@
     alias ll='ls -l'
     alias la='ls -A'
     alias lc='ls -CF'
-
+: "Colorize"
+    alias tree='tree -C'
 : "GREP DISPLAY"
     alias rm-sharp="grep -v '^\s*#'"
     alias rm-white="grep -v '^\s*$'"
