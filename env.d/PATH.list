@@ -3,7 +3,8 @@ $HOME/bin
 $HOME/.local/bin
 $HOME/.local/latex/bin
 $HOME/local/bin
-$HOME/.cargo/bin/
+$HOME/go/bin
+$HOME/.cargo/bin
 $HOME/.nesc/bin
 EOF
 )
