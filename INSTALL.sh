@@ -7,6 +7,7 @@ sudo apt install \
     language-pack-ja \
     perl
 
+curl -L git.io/antigen > $HOME/.zsh/custom-available.d/antigen.zsh
 ln -s $HOME/.zsh/.zshenv $HOME/
 
 mkdir -p $HOME/.zsh/custom-enable.d/
