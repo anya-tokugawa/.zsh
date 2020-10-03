@@ -9,4 +9,5 @@ if _hasCommand exa ; then
   alias la="exa -a"
   alias ll='ls --git -lbghu'
 fi
-if _hasCommand fd  ; then alias find="fd" ; fi
+if _hasCommand fd  ; then alias find="fd"  ; fi
+if _hasCommand bat ; then alias  cat="bat" ; fi
