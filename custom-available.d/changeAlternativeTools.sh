@@ -9,5 +9,17 @@ if _hasCommand exa ; then
   alias la="exa -a"
   alias ll='ls --git -lbghu'
 fi
-if _hasCommand fd  ; then alias find="fd"  ; fi
-if _hasCommand bat ; then alias  cat="bat" ; fi
+
+while read line
+do
+  orgCmd=$(echo $line | cut -d, -f1)
+  altCmd=$(echo $line | cut -d, -f2)
+  if _hasCommand $altCmd
+  then
+    eval "alias $orgCmd='$altCmd'"
+  fi
+done << EOF
+find,fd
+cat,bat
+apt,apt-fast
+EOF
