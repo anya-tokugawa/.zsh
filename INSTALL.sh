@@ -4,8 +4,6 @@ echo -n "Input current workspace name -> "
 read ws_name
 echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
 
-
-
 # Dependency
 
 
@@ -13,6 +11,7 @@ sudo apt install \
     zsh \
     language-pack-ja \
     perl
+    git
 
 curl -L git.io/antigen > $HOME/.zsh/custom-available.d/antigen.zsh
 ln -s $HOME/.zsh/.zshenv $HOME/

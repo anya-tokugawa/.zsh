@@ -4,7 +4,7 @@ export ZDOTDIR=$HOME/.zsh
 # auto load
 autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow}(!)[STAGED]%F{red}"
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}(!)%F{red}"
 zstyle ':vcs_info:git:*' unstagedstr "%F{red}(?)%F{red}"
 zstyle ':vcs_info:*' formats "%F{green}^%b%c%u%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
@@ -44,5 +44,6 @@ export DISPLAY=":0"
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
 
+export ZSH_TASKS="${HOME}/.ztasks"
 : "Load Profile"
 source $ZDOTDIR/.zprofile

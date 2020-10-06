@@ -1,4 +1,4 @@
-source $HOME/.zsh/config
+source $ZDOTDIR/config
 
 : "PROMPT"
 # 20200301:
@@ -12,15 +12,19 @@ source $HOME/.zsh/config
 #
 PREPWD=''
 function precmd () {
-      last_cmd=$(fc -l -1 | head -n1 | cut -c8-)
-      if [[ "$last_cmd" =~ 'git\ .*' ]] ; then vcs_info; fi
-      if [[ "$last_cmd" =~ 'cd\ .*'  ]] ; then vcs_info; PREPWD=$(pwd | sed -e 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!'); fi
+      last_cmds=$(fc -l -1 | head -n1 | cut -c8-)
+      last_cmd=$(echo $last_cmds | cut -d' ' -f1)
+      if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
+      if [[ "$last_cmd" =~ 'vi.*'  ]]  ; then vcs_info; fi
+      if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
+      if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
+      PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
       PROMPT="%F{207}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
 %F{250}%T %F{207} ~ %F{reset} "
 
 }
 vcs_info
-PREPWD=$(pwd | sed -e 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
+PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
 PROMPT="
 %F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
 %F{250}%T %F{207} ~ %F{reset} "
