@@ -4,9 +4,9 @@ export ZDOTDIR=$HOME/.zsh
 # auto load
 autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow} [STAGED]%F{red}"
-zstyle ':vcs_info:git:*' unstagedstr "%F{yellow} [UNSTAGED] %F{red}"
-zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}(!)[STAGED]%F{red}"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}(?)%F{red}"
+zstyle ':vcs_info:*' formats "%F{green}^%b%c%u%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
 : "ZSH HISTORY"
@@ -17,7 +17,7 @@ export SAVEHIST=10000
 : "PATH"
 for i in `ls -1 --file-type "${ZDOTDIR}/env.d"`
 do
-    source "${ZDOTDIR}/env.d/${i}"
+  source "${ZDOTDIR}/env.d/${i}"
 done
 
 : "HOST ALIASES"
@@ -34,8 +34,8 @@ export EDITOR=`which vim`
 export PAGEOR=`which more`
 
 : "IP_ADDRESS"
-declare -a -x IP_ADDRESSES
-IP_ADDRESSES=$(ip a | grep inet | grep -ve inet6 -e 127.0.0. | awk '{print $2}'| xargs)
+#declare -a -x IP_ADDRESSES
+#IP_ADDRESSES=$(ip a | grep inet | grep -ve inet6 -e 127.0.0. | awk '{print $2}'| xargs)
 
 : "OUTPUT DISPLAY"
 export DISPLAY=":0"
