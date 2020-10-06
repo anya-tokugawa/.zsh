@@ -8,11 +8,14 @@ My ZSH Configuration
 - automatic update conf using `git pull` in background.
 - no third-party extensions(e.g. oh-my-zsh)
 - custom-shell-extension in `custom-available.d/` ( symlink to `custom-enable.d/`)
-- terminal short note (called `memo`)  extension
+- Simple Inline Note (called `memo`)  extension
+- Simple Task Manager with git
 
 ## Dependency(Alias)
 
 - zsh(checked:`zsh 5.4.2 (x86_64-ubuntu-linux-gnu)`)
+- perl
+- git
 
 ## Install
 
@@ -33,7 +36,7 @@ chmod x INSTALL.sh
 sudo chsh -s /bin/zsh
 
 #-----------------------------
-# NO_SUDO
+# When you have no root permission and default-shell is bash
 
 cat <<EOF > ~/.bash_profile
 /path/to/zsh
@@ -50,10 +53,31 @@ then
  exit
 fi
 EOF
-
 ```
 
 ## Feature
+
+### Task Manage
+
+```
+% tadd [TaskName]
+% tadd [TaskName] [MoreText]
+---
+% t
+No.    task              add date               detail
+-----  ------------      ---------------------  ---------
+1      Apo               2020-10-06 16:13:20
+2      StudentAssitant   2020-10-06 16:19:48    UNIX/Database
+3      Parttime Job      2020-10-06 16:29:47
+---
+% tdone 3
+done Parttime Job
+% tdel 1
+deleted Apo
+% tsync
+> sync via git
+----
+```
 
 ### Memo Feature
 
@@ -115,6 +139,15 @@ this feature detected and change-directory to HomeDir.
 - if `sudo apt`: -> alias to `apt-fast`
 - else: `sudo [other_args]`
 
+#### alias alnativeTool `changeAlternativeTools.sh`
+
+when hasCommand, aliasd ....
+
+- `find` -> `fd`
+- `cat`  -> `bat`
+- `ls`   -> `exa`
+- `apt`  -> `apt-fast`
+
 #### dstask aliases - `dstask.sh`
 
 - dstask custom command
@@ -137,6 +170,9 @@ d    un || untagged ...            -organised
 
 - custom terminal startup shellscript can store to `custom.d/`(git ignored)
 
+##### Performance
+
+- init: `0.7653s`
 
 ## Design
 
