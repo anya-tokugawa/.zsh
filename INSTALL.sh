@@ -1,6 +1,13 @@
 #!/bin/bash -eu
 
+echo -n "Input current workspace name -> "
+read ws_name
+echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
+
+
+
 # Dependency
+
 
 sudo apt install \
     zsh \

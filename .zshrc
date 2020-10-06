@@ -1,3 +1,5 @@
+source $HOME/.zsh/config
+
 : "PROMPT"
 # 20200301:
 # - /etc/zshrc にPROMPT変数が定義されている。
@@ -8,37 +10,45 @@
 #%K{0} %F{7} [%~] %#%K{reset}%F{reset} "
 #
 #
+PREPWD=''
+function precmd () {
+      last_cmd=$(fc -l -1 | head -n1 | cut -c8-)
+      if [[ "$last_cmd" =~ 'git\ .*' ]] ; then vcs_info; fi
+      if [[ "$last_cmd" =~ 'cd\ .*'  ]] ; then vcs_info; PREPWD=$(pwd | sed -e 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!'); fi
+      PROMPT="%F{207}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
+%F{250}%T %F{207} ~ %F{reset} "
 
-case "$TERM" in
-    xterm*|kterm*|rxvt*)
-	function precmd () {
-	vcs_info
-        # Shorten the path of pwd
-	PREPWD=`pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!'`
-	if test "$(whoami)" == "root"
-	then
-		PROMPT="
-%F{154}${HOST}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
-%F{250}%T %F{207}#> %F{reset} "
-	else
-		PROMPT="
-%F{154}${HOST}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
-%F{250}%T %F{207}-> %F{reset} "
-	fi
-	}
-    ;;
-esac
+}
+vcs_info
+PREPWD=$(pwd | sed -e 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
+PROMPT="
+%F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
+%F{250}%T %F{207} ~ %F{reset} "
 
+
+
+
+#test
+#add-zsh-hook precmd vcs_info
+
+if test "$(whoami)" == "root"
+then
+cat <<ATTENT
+====================
+HELLO ADMIN PROMPT!
+====================
+ATTENT
+fi
 RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
 
 
 # INFO
-echo "$HOST - $IP_ADDRESSES"
-echo "----------------------------------"
+#echo "$HOST - $IP_ADDRESSES"
+#echo "----------------------------------"
 : "Check Update"
 	function zsh_update() {
         cd  $ZDOTDIR
-        echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
+        #echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
         OLD_ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
         (git pull  > /dev/null 2>&1) && \
           ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
@@ -52,10 +62,9 @@ echo "----------------------------------"
         fi
     }
     # バックグラウンドで実行
-    zsh_update &! # bash の & disown 相当
+  zsh_update &! # bash の & disown 相当
 : "Define Function"
     function chpwd() {
-        # if exist `exa -> aliased `ls` to `exa`
         ls -F
     }
 : "Note Command"
@@ -99,42 +108,6 @@ zshaddhistory() {
 	test $(echo ${line} |grep -o '\n' |wc -l)  -lt 3
 }
 
-# 2020-02-24: catコマンドを拡張子別に変更
-function cat(){
-    # ヒアドキュメント判定
-    if test "`echo $@ | grep 'EOF' | grep '<<' `"  -eq 0
-    then
-        /bin/cat $@
-        return
-    else
-        # 複数ファイルを判定しない
-        if [ $# -eq 1 ];
-        then
-            # PlainTextなファイル
-            if [ "`file $1 | grep 'text'`" ];
-            then
-                # 拡張子別に振り分け
-                case "$1" in
-                    *.csv ) column -ts, $1 | nl ;;
-                    *.md  ) mdcat $1 | nl ;;
-                    *     ) /bin/cat $1 | nl ;;
-                esac
-            else
-                /bin/cat $1 | nl
-            fi
-        else
-            /bin/cat  $@ | nl
-        fi
-    fi
-}
-
-# Pecoを用いたlisted Change Directory.
-function lscd {
-    local dir="$( ls -1A | grep "/" |  peco )"
-    if [ ! -z "$dir" ] ; then
-        cd "$dir"
-    fi
-}
 # Memo書き込み関数(alias @write)
 function memo_write(){
     if test "$MEMO" = ""
