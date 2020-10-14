@@ -8,6 +8,8 @@ if _hasCommand exa ; then
   alias ls="exa"
   alias la="exa -a"
   alias ll='ls --git -lbghu'
+  # overwrite chpwd function
+  function chpwd() { test $(/bin/ls -1 | wc -l) -gt 10 && exa || exa -lbghu --git }
 fi
 
 while read line
