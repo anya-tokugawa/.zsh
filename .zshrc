@@ -60,17 +60,14 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
         then
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
-                echo "ZLOG: ZSH UPDATED - NEW_VERSION: $ZSH_CONF_VERSION - $(git log | head -6 | grep 'Date' | sed 's/Date:   //')(Plz Reload Settings)"
-                echo ""
+              TASK="[ZSH_UPDATED] $TASK"
             fi
         fi
     }
     # バックグラウンドで実行
   zsh_update &! # bash の & disown 相当
 : "Define Function"
-    function chpwd() {
-        ls -F
-    }
+    function chpwd() { test $(/bin/ls -1 | wc -l) -gt 10 && ls || ll }
 : "Note Command"
     function @(){
         if [ $# -eq 0 ]
