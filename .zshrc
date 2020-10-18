@@ -161,7 +161,18 @@ function title() { echo -e "\033]0;${1:?please specify a title}\007" ; }
 function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
-trap "memo_write" EXIT INT
+
+##############################
+## EXIT
+
+_exit_function(){
+  memo_write
+  # PPIDが`init`でRunningしているWSLの場合は、Exit 0で切らせる。
+  test "$(ps -o comm "$PPID" | tail -n1)" = "init" && exit 0
+}
+
+
+trap "_exit_function" EXIT INT
 
 #Custom Config
 for i in $(/bin/ls -1 "${ZDOTDIR}/custom-enable.d")
