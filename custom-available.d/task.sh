@@ -20,7 +20,7 @@ function _task_list_verbose(){
     echo "$cnt|$_task_name|$_task_add_date $_task_add_time|$_task_more"
   done
 }
-function tadd(){
+function _task_add(){
   if [[ $1 == '' ]]; then echo "plz name."; return 1; fi
   _id=$(uuidgen)
   echo "$_id|$1" >> $_indexFile
@@ -33,7 +33,7 @@ function tadd(){
   git -C ${TASK_DIR} add $_targetFile $_indexFile
   git -C ${TASK_DIR} commit -m"ADD: $1 <$_id>"
 }
-function tdone(){
+function _task_done(){
   if [[ $1 == '' ]]; then echo "plz id."; return 1; fi
   _id=$(awk "NR==$1" $_indexFile | cut -d'|' -f1)
   _name=$(awk "NR==$1" $_indexFile | cut -d'|' -f2)
@@ -45,7 +45,7 @@ function tdone(){
   git -C ${TASK_DIR} commit -m"DONE: $_name <$_id>"
   if [[ "$_name" == "$TASK" ]]; then TASK="" fi
 }
-function tdel(){
+function _task_delete(){
   if [[ $1 == '' ]]; then echo "plz id."; return 1; fi
   _id=$(awk "NR==$1" $_indexFile | cut -d'|' -f1)
   _name=$(awk "NR==$1" $_indexFile | cut -d'|' -f2)
@@ -57,7 +57,7 @@ function tdel(){
   if [[ "$_name" == "$TASK" ]]; then TASK="" fi
 }
 ##################################################
-function tget(){
+function _task_get(){
   if [[ $1 == '' ]]; then echo "plz id."; return 1; fi
   _id=$(awk "NR==$1" $_indexFile | cut -d'|' -f1)
   source "${TASK_DIR}/${_id}.source"
@@ -66,22 +66,56 @@ function tget(){
   echo "Add Date:  $_task_add_date $_task_add_time"
 }
 
-function tpin(){
-  if [[ $1 == '' ]]; then echo "plz id."; return 1; fi
-  TASK=$(awk "NR==$1" $_indexFile | cut -d'|' -f2)
+function _task_pin(){
+  if [[ $1 == '' ]]
+  then
+    TASK=""
+  else
+    TASK=$(awk "NR==$1" $_indexFile | cut -d'|' -f2)
+  fi
 }
-function tupin(){
-  TASK=""
-}
-##################################################
-function t(){
+##################################
+function _task_show(){
+  if [[ $(wc -l $_indexFile | awk '{print $1}') -gt 10 ]]
+  then
+    clear
+  fi
   _task_list_verbose  | column -ts'|'
 }
-function tsync(){
+function _task_tsync(){
   git -C ${TASK_DIR} pull
   test $? -ne 0 && return 1
   git -C ${TASK_DIR} push
 }
-function tlog(){
+function _task_log(){
   git -C ${TASK_DIR} log
+}
+function  _task_help(){
+/bin/cat << HELP_TEXT
+usage: t [COMMAND] [SUFFIX]
+
+COMMAND:
+ add  TITLE [detail]
+ done id
+ del  id
+ get  id
+ pin [id]
+ sync
+ log
+ help
+HELP_TEXT
+}
+
+function t(){
+  case "$1" in
+    "add")  _task_add $2 $3 ;;
+    "done") _task_done $2 ;;
+    "del")  _task_del $2 ;;
+    "get")  _task_get $2 ;;
+    "pin")  _task_pin $2 ;;
+    "sync") _task_sync ;;
+    "log")  _task_log  ;;
+    "help") _task_help ;;
+    *)      _task_show ;;
+  esac
 }
