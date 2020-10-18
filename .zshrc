@@ -12,6 +12,12 @@ source $ZDOTDIR/config
 #
 PREPWD=''
 function precmd () {
+      if [[ $? -eq 0 ]]
+      then
+        STATUS_COLOR='%F{46}'  # Green is true.
+      else
+        STATUS_COLOR='%F{196}' # Red is false.
+      fi
       last_cmds=$(fc -l -1 | head -n1 | cut -c8-)
       last_cmd=$(echo $last_cmds | cut -d' ' -f1)
       if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
@@ -19,7 +25,7 @@ function precmd () {
       if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
       if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
       PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-      PROMPT="%F{207}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
+      PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
 %F{250}%T %F{207} ~ %F{reset} "
 
 }
