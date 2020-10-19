@@ -168,7 +168,7 @@ function @reload(){
 _exit_function(){
   memo_write
   # PPIDが`init`でRunningしているWSLの場合は、Exit 0で切らせる。
-  test "$(ps -o comm "$PPID" | tail -n1)" = "init" && exit 0
+  test "$(ps -o comm "$PPID" | tail -n1)" = "init" && return 0
 }
 
 
