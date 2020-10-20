@@ -4,6 +4,9 @@
     alias ll='ls -l'
     alias la='ls -A'
     alias lc='ls -CF'
+    function lf(){
+      ls -1 $@ | xargs readlink -f
+    }
 : "Colorize"
     alias tree='tree -C'
 : "GREP DISPLAY"
@@ -23,6 +26,8 @@
     alias of='libreoffice'
     alias zsh-reload='source ~/.zshenv'
     alias bye='loginctl lock-session'
+    alias ok='true'
+    alias ng='false'
 : "history"
     alias hist='history'
     alias histall='history-all'
