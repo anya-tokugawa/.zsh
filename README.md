@@ -176,5 +176,5 @@ d    un || untagged ...            -organised
 
 ## Design
 
-![zsh design 20200701](lib/zsh.jpg)
+![zsh design 20200701](assets/zsh.jpg)
 
