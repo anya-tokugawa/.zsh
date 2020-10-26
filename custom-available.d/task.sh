@@ -21,13 +21,24 @@ function _task_list_verbose() {
     echo "No.|task|add date|detail|tags"
     echo "-----|----------------------|---------------------|---------|--------"
   fi
+  suffix='\033[0;37m'
+
   for file in $(cut -d'|' -f1 $_indexFile )
   do
+    prefix=""
     cnt=$(echo "$cnt + 1" | bc)
     source "${TASK_DIR}/${file}.source"
+    for tag in $(echo $_task_tags | xargs)
+    do
+      test "$tag" = "1" && prefix='\033[0;31m' && continue
+      test "$tag" = "2" && prefix='\033[0;33m' && continue
+      test "$tag" = "3" && prefix='\033[0;36m' && continue
+      test "$tag" = "0" && prefix='\033[0;32m' && continue
+    done
+
     if [ "$1" = "verbose" ]
-      then echo " $cnt| $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags| $file"
-      else echo " $cnt| $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags"
+      then echo -e "$prefix $cnt| $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags| $file $suffix"
+      else echo -e  "$prefix $cnt| $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags | $suffix"
     fi
   done
 }
@@ -105,10 +116,12 @@ function _task_tags(){
   for tag in ${@:2}
   do
     [ "$_task_tags" != '' ] && _task_tags=" $_task_tags"
-    tag_name=$(echo $tag | cut -c 2- )
+    tag_name="$(echo $tag | cut -c 2- )"
+    sedPtn="s;\ $tag_name;;g"
     tag_prefix=$(echo $tag | cut -c 1 )
     [ "$tag_prefix" = "+" ] && _task_tags="$tag_name$_task_tags"
-    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e s;\ $tag_name\ ;\ ;g )"
+#    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e s;\ $tag_name\ ;\ ;g )"
+    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e "$sedPtn" )"
   done
 
   _targetFile="${TASK_DIR}/${_id}.source"
@@ -142,8 +155,10 @@ function _task_show(){
     then
       _task_list_verbose $@ | column -ts'|' | head -n1
       _task_list_verbose $@ | column -ts'|' | grep ${@:2}
+      echo -e "TAG: \033[0;31m[1] Important \033[0;33m[2] Warning \033[0;36m[3] Pending \033[0;32m[0] No-Problem"
     else
       _task_list_verbose $@ | column -ts'|'
+      echo -e "TAG: \033[0;31m[1] Important \033[0;33m[2] Warning \033[0;36m[3] Pending \033[0;32m[0] No-Problem"
     fi
   fi
 }
