@@ -20,7 +20,7 @@ function pal(){
       echo "  add YYYYMMDD SCHEDULE - add Calendar."
       echo ""
       echo "Type \"man pal\" for more information." ;;
-    *) eval "$palPath -c 0 -r 5 $@"  ;;
+    *) eval "$palPath -c 0 -r 2 $@"  ;;
   esac
 }
 

@@ -15,9 +15,9 @@ export HISTSIZE=1000
 export SAVEHIST=10000
 
 : "PATH"
-for i in `ls -1 --file-type "${ZDOTDIR}/env.d"`
+for i in `ls -1 --file-type "${ZDOTDIR}/include.d"`
 do
-  source "${ZDOTDIR}/env.d/${i}"
+  source "${ZDOTDIR}/include.d/${i}"
 done
 
 : "HOST ALIASES"
