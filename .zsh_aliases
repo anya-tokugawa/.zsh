@@ -28,6 +28,7 @@
     alias bye='loginctl lock-session'
     alias ok='true'
     alias ng='false'
+    alias watchTail='watch -n1 tail -n"$(($(tput lines) -2))"'
 : "history"
     alias hist='history'
     alias histall='history-all'
