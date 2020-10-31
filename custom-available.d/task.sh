@@ -106,7 +106,8 @@ function _task_tags(){
   if [[ $1 == '' ]]; then echo "plz id."; return 1; fi
 
   _id=$(awk "NR==$1" $_indexFile | cut -d'|' -f1)
-  source "${TASK_DIR}/${_id}.source"
+  _targetFile="${TASK_DIR}/${_id}.source"
+  source $_targetFile
   if [[ $2 == '' ]]
   then
     echo "$_task_tags"
@@ -124,13 +125,14 @@ function _task_tags(){
     [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e "$sedPtn" )"
   done
 
-  _targetFile="${TASK_DIR}/${_id}.source"
   echo -n '' > $_targetFile
   echo "_task_name=\"$_task_name\"" >> $_targetFile
   echo "_task_more=\"$_task_more\"" >> $_targetFile
   echo "_task_add_date=\"$_task_add_date\"" >> $_targetFile
   echo "_task_add_time=\"$_task_add_time\"" >> $_targetFile
   echo "_task_tags=\"$_task_tags\"" >> $_targetFile
+  git -C ${TASK_DIR} add $_targetFile
+  git -C ${TASK_DIR} commit -m"Tags Modified: ${@:2}"
 }
 
 function _task_pin(){
