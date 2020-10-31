@@ -161,6 +161,16 @@ function title() { echo -e "\033]0;${1:?please specify a title}\007" ; }
 function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
+# for Weather
+function wttr(){
+  if [[ $1 = "" ]]
+  then
+    _wttr=$WTTR_LOCATION
+  else
+    _wttr=$1
+  fi
+  curl https://ja.wttr.in/${_wttr}?format="%l:+%c\n------\nReal:+%t\nFeel:+%f\nWind:+%w\nSunRise:+%S\nSun-Set:+%s\n"
+}
 
 ##############################
 ## EXIT
