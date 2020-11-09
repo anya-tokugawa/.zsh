@@ -11,16 +11,20 @@ then
   git init $TASK_DIR
 fi
 
-function _task_list_verbose() {
+function _task_list() {
   cnt=0
-  if [[ "$1" == "verbose" ]]
-  then
-    echo "No.|note|task|add date|detail|tags|uuid"
-    echo "-----|----|----------------------|---------------------|---------|--------|----------------------"
-  else
-    echo "No.|note|task|add date|detail|tags"
-    echo "-----|----|----------------------|---------------------|---------|--------"
-  fi
+
+  case "$1" in
+    "verbose")
+      echo "No.|note|task|add date|detail|tags|uuid"
+      echo "-----|----|----------------------|---------------------|---------|--------|----------------------" ;;
+    "short")
+      echo "No.|task"
+      echo "---|----" ;;
+    *)
+      echo "No.|note|task|add date|detail|tags"
+      echo "-----|----|----------------------|---------------------|---------|--------" ;;
+  esac
   suffix='\033[0;37m'
 
   for file in $(cut -d'|' -f1 $_indexFile )
@@ -40,10 +44,11 @@ function _task_list_verbose() {
       test "$tag" = "0" && prefix='\033[0;32m' && continue
     done
 
-    if [ "$1" = "verbose" ]
-      then echo -e "$prefix $cnt| $note | $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags| $file $suffix"
-      else echo -e  "$prefix $cnt| $note | $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags | $suffix"
-    fi
+    case "$1" in
+      "verbose") echo -e "$prefix $cnt | $note | $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags| $file $suffix" ;;
+      "short") echo -e "$prefix $cnt | $_task_name" ;;
+      *) echo -e  "$prefix $cnt| $note | $_task_name| $_task_add_date $_task_add_time| $_task_more| $_task_tags | $suffix" ;;
+    esac
   done
 }
 function _task_list_json() {
@@ -235,23 +240,37 @@ function _task_note(){
 
 ##################################
 function _task_show(){
-  if [[ $(wc -l $_indexFile | awk '{print $1}') -gt 10 ]]
+  indexLength=$(wc -l $_indexFile | awk '{print $1}')
+  if [[ $indexLength -gt $(tput lines) ]]
   then
-    clear
+    outopts="less -SR"
+  else
+    outopts="tee"
   fi
+
   if [ "$1" = "raw" ]
   then
-    _task_list_verbose $@
+    _task_list $@
   else
+    if [ $indexLength -gt $(tput lines) ]
+    then
+      outopts="less -SR"
+    elif [ $( _task_list $@ | column -ts'|' | awk '{ print length }' | sort | tail -n1) -gt  $(tput cols) ] && [ $( _task_list short | column -ts'|' | awk '{ print length }' | sort | tail -n1) -lt  $(tput cols) ] && [ "$1" == "" ]
+      then
+        _task_list short | column -ts'|'
+        return
+    else
+      outopts="tee"
+    fi
     if [ "$1" = "grep" ]
     then
-      _task_list_verbose $@ | column -ts'|' | head -n1
-      _task_list_verbose $@ | column -ts'|' | grep ${@:2}
+      _task_list $@ | column -ts'|' | head -n1
+      _task_list $@ | column -ts'|' | grep ${@:2}
       echo -e "TAG: \033[0;31m[1] Important \033[0;33m[2] Warning \033[0;36m[3] Pending \033[0;32m[0] No-Problem"
     else
-      _task_list_verbose $@ | column -ts'|'
+      _task_list $@ | column -ts'|'
       echo -e "TAG: \033[0;31m[1] Important \033[0;33m[2] Warning \033[0;36m[3] Pending \033[0;32m[0] No-Problem"
-    fi
+    fi | eval "$outopts"
   fi
 }
 function _task_sync(){
