@@ -109,10 +109,9 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
     }
 : "zshaddhistory Process"
 zshaddhistory() {
-    local line=${1%%$'\n'}
-    local cmd=${line%% *}
-    #　三行以下のコマンドのみ格納
-	test $(echo ${line} |grep -o '\n' |wc -l)  -lt 3
+  local line=${1%%$'\n'}
+  local cmd=${line%% *}
+  test $(echo ${line} |grep -o '\n' |wc -l)  -lt 10 || echo '*no Insert History'
 }
 
 # Memo書き込み関数(alias @write)
