@@ -194,9 +194,10 @@ function _task_tags(){
     tag_name="$(echo $tag | cut -c 2- )"
     sedPtn="s;\ $tag_name;;g"
     tag_prefix=$(echo $tag | cut -c 1 )
-    [ "$tag_prefix" = "+" ] && _task_tags="$tag_name$_task_tags"
-#    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e s;\ $tag_name\ ;\ ;g )"
-    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e "$sedPtn" )"
+    ok=0
+    [ "$tag_prefix" = "+" ] && _task_tags="$tag_name$_task_tags" && ok=1
+    [ "$tag_prefix" = "-" ] && _task_tags="$(echo $_task_tags | sed -e "$sedPtn" )" && ok=1
+    [ $ok -eq 0 ] && echo "task tags process terminated: plz prefix '+' or '-' " > /dev/stderr && return 1
   done
 
   echo -n '' > $_targetFile
