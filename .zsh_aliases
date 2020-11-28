@@ -36,3 +36,6 @@
     alias history-all='history -E 1'
 : "Line Display"
     #alias nl='nl -w3 -nrz -s":| "'
+
+: "OtherTool"
+    alias ls-size='/usr/bin/find . -type f -exec ls -al {} \; | sort -k 5 -nr | less'
