@@ -7,6 +7,7 @@ _hasCommand () {
 
 echo -n "Input current workspace name -> "
 read ws_name
+echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
 
 echo -n "Input Wttr.in Location -> "
 read wttr
