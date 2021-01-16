@@ -199,3 +199,5 @@ done
 
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
+
+rm $ZLOCKFILE
