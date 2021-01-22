@@ -28,11 +28,13 @@
     alias bye='loginctl lock-session'
     alias ok='true'
     alias ng='false'
-    alias watchTail='watch -n1 tail -n"$(($(tput lines) -2))"'
-    alias tailfull='tail -fn"$(($(tput lines) -2))"'
+    alias tailfull="tail -n"$(($(tput lines) -2))
 : "history"
     alias hist='history'
     alias histall='history-all'
     alias history-all='history -E 1'
 : "Line Display"
     #alias nl='nl -w3 -nrz -s":| "'
+: "shell_alias"
+    alias watch-tailfull="${ZDOTDIR}/util.d/watch-tailfull.sh"
+    alias watch-tailfull-csv="${ZDOTDIR}/util.d/watch-tailfull-csv.sh"
