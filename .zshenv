@@ -1,5 +1,36 @@
 : "ZSH ENV DIRECTORY (NEED TO LINK 'ln -s /HomeDir/.zsh/.zshrnv /HomeDir/.zshenv'"
+# if non-interactive is return
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 export ZDOTDIR=$HOME/.zsh
+export ZLOCKFILE="$(mktemp).zshlock"
+echo "$PID" > $ZLOCKFILE
+
+function check_booting(){
+	
+
+	local boot_cnt=0
+	while :
+	do
+		sleep 1
+		if [[ ! -f $ZLOCKFILE ]]
+		then
+			return 0
+		fi
+		if [[ $boot_cnt -ge 10 ]]
+		then
+			kill -14 $$
+		fi
+		boot_cnt=$((++boot_cnt))
+	done
+}
+
+check_booting &!
+
+
 
 # auto load
 autoload -Uz vcs_info

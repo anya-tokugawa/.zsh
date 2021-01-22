@@ -6,3 +6,4 @@
 !/custom-enable.d/
 /custom.d/*
 !/custom.d/
+/custom-available.d/antigen.zsh
