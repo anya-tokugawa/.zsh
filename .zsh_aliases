@@ -5,7 +5,11 @@
     alias la='ls -A'
     alias lc='ls -CF'
     function lf(){
-      ls -1 $@ | xargs readlink -f
+      #ls -1 $@ | xargs readlink -f
+      for i in $(/bin/ls -1)
+      do
+        echo ${PWD}/${i}
+      done
     }
 : "Colorize"
     alias tree='tree -C'
