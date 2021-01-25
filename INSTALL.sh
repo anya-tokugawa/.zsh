@@ -5,6 +5,14 @@ _hasCommand () {
   return 1
 }
 
+_setConfig(){
+  if [[ -f $2 ]]
+  then
+    mv $2 $2.default-config
+  fi
+  ln -s $1 $2
+}
+
 echo -n "Input current workspace name -> "
 read ws_name
 echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
@@ -25,6 +33,16 @@ ln -s $HOME/.zsh/.zshenv $HOME/
 
 mkdir -p $HOME/.zsh/custom-enable.d/
 mkdir -p $HOME/.zsh/custom.d/
+touch    $HOME/.zsh/MEMO.txt
+mkdir -p $HOME/.local/packages
+
+
+# linked dotFiles
+dotBase="$HOME/.zsh/src.dotfiles"
+_setConfig  ${dotBase}/bash_run_cmd.sh $HOME/.bashrc # .bashrc
+
+
+
 
 cat <<EOF
 +----------------------+
