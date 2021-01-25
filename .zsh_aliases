@@ -12,16 +12,18 @@
       done
     }
 : "Colorize"
-    alias tree='tree -C'
+    alias tree='tree -NC' # -N for Japanese.
+    alias grep='grep --color=auto'
+    alias less='less -SR'
 : "GREP DISPLAY"
-    alias rm-sharp="grep -v '^\s*#'"
-    alias rm-white="grep -v '^\s*$'"
-    alias rm-semicol="grep -v '^\s*;'"
+    alias grep-sharp="grep -v '^\s*#'"
+    alias grep-blank="grep -v '^\s*$'"
+    alias grep-semicol="grep -v '^\s*;'"
+    alias grep-slash="grep -v '^\s*\/'"
 : "Network Shortcut"
     alias inet4='ip a | grep -v inet6 | grep inet'
     alias inet6='ip a | grep inet6'
     alias inet='ip a  | grep inet'
-    alias ipaddr='echo $IP_ADDRESS'
     alias trec='npx terminalizer'
 : "Shortcut"
     alias vi='vim'
@@ -46,3 +48,4 @@
     alias ls-size='/usr/bin/find . -type f -exec ls -al {} \; | sort -k 5 -nr | less'
     alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
     alias exit-zsh="exit 14"
+    alias bash="export RUN_ZSH=1 ; /usr/bin/env bash"
