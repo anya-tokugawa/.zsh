@@ -60,9 +60,9 @@ export LC_ALL="ja_JP.UTF-8"
 export LANGUAGE="ja"
 
 : "DEFAULT EDITOR"
-export EDITOR=`which vim`
+declare -rx EDITOR=`which vim`
 : "DEFAULT PAGEOR"
-export PAGEOR=`which more`
+declare -rx PAGEOR=`which more`
 
 : "IP_ADDRESS"
 #declare -a -x IP_ADDRESSES
