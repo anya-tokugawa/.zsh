@@ -69,7 +69,7 @@ declare -rx PAGEOR=`which more`
 #IP_ADDRESSES=$(ip a | grep inet | grep -ve inet6 -e 127.0.0. | awk '{print $2}'| xargs)
 
 : "OUTPUT DISPLAY"
-export DISPLAY=":0"
+[[ -z "$DISPLAY" ]] && export DISPLAY=":0"
 
 : "GIT ACCESS FS"
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
