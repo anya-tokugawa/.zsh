@@ -44,6 +44,10 @@
 : "shell_alias"
     alias watch-tailfull="${ZDOTDIR}/util.d/watch-tailfull.sh"
     alias watch-tailfull-csv="${ZDOTDIR}/util.d/watch-tailfull-csv.sh"
+: "Line Edit"
+    alias del-line-head-spaces="sed 's/^[ \t]*//'"
+    alias del-line-tail-spaces="sed -e 's/[ \t]*$//’"
+    alias del-all-spaces="sed 's/ //g’"
 : "OtherTool"
     alias ls-size='/usr/bin/find . -type f -exec ls -al {} \; | sort -k 5 -nr | less'
     alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
