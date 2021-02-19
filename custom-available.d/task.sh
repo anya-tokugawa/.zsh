@@ -12,6 +12,13 @@ then
 fi
 
 function _task_list() {
+  if [[ ! -f $_indexFile ]]
+  then
+    prefix='\033[0;33m'
+    suffix='\033[0;37m'
+    echo -e "${prefix}Index file not found! now generate."
+    touch $_indexFile
+  fi
   cnt=0
 
   case "$1" in
