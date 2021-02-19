@@ -11,6 +11,8 @@ source $ZDOTDIR/config
 #
 #
 PREPWD=''
+term_time=$(date +%s)
+notifySec=30 # 実行時間N秒以上の場合，処理する．
 function precmd () {
       if [[ $? -eq 0 ]]
       then
@@ -18,8 +20,17 @@ function precmd () {
       else
         STATUS_COLOR='%F{196}' # Red is false.
       fi
+      new_term_time=$(date +%s)
       last_cmds=$(fc -l -1 | head -n1 | cut -c8-)
       last_cmd=$(echo $last_cmds | cut -d' ' -f1)
+      # 多く処理した場合は，通知する
+      if [[ $(( $new_term_time - $term_time )) -gt $notifySec ]] && [[ -f ~/.slackrc ]]
+      then
+        source ~/.slackrc
+        POST_TEXT="$last_cmd is end."
+        post_slack
+      fi
+
       if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
       if [[ "$last_cmd" =~ 'vi.*'  ]]  ; then vcs_info; fi
       if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
