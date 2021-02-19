@@ -73,3 +73,6 @@
         return 1
       fi
     }
+    function histgrep(){
+     history-all | grep "$@"
+    }
