@@ -30,6 +30,7 @@ function precmd () {
         POST_TEXT="$last_cmd is end."
         post_slack
       fi
+      term_time=$new_term_time
 
       if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
       if [[ "$last_cmd" =~ 'vi.*'  ]]  ; then vcs_info; fi
