@@ -12,7 +12,12 @@ source $ZDOTDIR/config
 #
 PREPWD=''
 term_time=$(date +%s)
-notifySec=30 # 実行時間N秒以上の場合，処理する．
+notifySec=4 #30 # 実行時間N秒以上の場合，処理する．
+#function before_runcmd(){
+#  echo "BT: "
+#  term_time=$(date +%s)
+#}
+#trap 'before_runcmd' DEBUG
 function precmd () {
       if [[ $? -eq 0 ]]
       then
@@ -26,9 +31,10 @@ function precmd () {
       # 多く処理した場合は，通知する
       if [[ $(( $new_term_time - $term_time )) -gt $notifySec ]] && [[ -f ~/.slackrc ]]
       then
-        source ~/.slackrc
-        POST_TEXT="$last_cmd is end."
-        post_slack
+        #source ~/.slackrc
+        #POST_TEXT="$last_cmd is end."
+        #post_slack
+        : "current disabled."
       fi
       term_time=$new_term_time
 

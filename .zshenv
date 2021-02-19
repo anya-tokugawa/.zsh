@@ -10,8 +10,6 @@ export ZLOCKFILE="$(mktemp).zshlock"
 echo "$PID" > $ZLOCKFILE
 
 function check_booting(){
-	
-
 	local boot_cnt=0
 	while :
 	do
@@ -23,6 +21,7 @@ function check_booting(){
 		if [[ $boot_cnt -ge 10 ]]
 		then
 			kill -14 $$
+      return 1
 		fi
 		boot_cnt=$((++boot_cnt))
 	done
