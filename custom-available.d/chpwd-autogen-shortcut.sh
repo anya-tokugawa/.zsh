@@ -1,5 +1,6 @@
 
 _scLinkDir="$HOME/links/"
+mkdir -p $scLinkDir
 _ttyName=$(echo "$TTY" | sed 's;^/dev/;;g' | tr '/' '-' ) # pts-1
 export ZSH_SCLINK_FILE="${_scLinkDir}${_ttyName}.source"
 
