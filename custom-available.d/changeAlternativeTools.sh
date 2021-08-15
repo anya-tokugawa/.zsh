@@ -9,7 +9,12 @@ if _hasCommand exa ; then
   alias la="exa -a"
   alias ll='ls --git -lbghu'
   # overwrite chpwd function
-  function chpwd() { test $(/bin/ls -1 | wc -l) -gt 10 && exa || exa -lbghu --git }
+  chpwd() {
+    l1=$(/bin/ls -1 | wc -l)
+    l2=$(tput lines)
+    test $l1 -gt $(( $l2 * 5 ))  && echo "manymanyfiles... $l1" && return 0
+    test $l1 -gt $l2 && ls -l || ls
+  }
 fi
 
 while read line
@@ -21,7 +26,7 @@ do
     eval "alias $orgCmd='$altCmd'"
   fi
 done << EOF
-find,fd
 cat,bat
 apt,apt-fast
 EOF
+# find,fd
