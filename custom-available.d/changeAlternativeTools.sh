@@ -13,7 +13,6 @@ if _hasCommand exa ; then
     l1=$(/bin/ls -1 | wc -l)
     l2=$(tput lines)
     test $l1 -gt $(( $l2 * 5 ))  && echo "manymanyfiles... $l1" && return 0
-    test $l1 -gt $l2 && ls -l || ls
   }
 fi
 
