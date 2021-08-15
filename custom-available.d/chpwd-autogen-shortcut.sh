@@ -15,7 +15,7 @@ function chpwd(){
   # NOTE: add impl. current dir link.
   # HACK: TODO: How do make shortcut w no symlink, no hardlink.
   echo "cd \$PWD && echo \" - Jumping Done! : \$PWD\"" > "\$ZSH_SCLINK_FILE"
-  echo a+x "\${ZSH_SCLINK_FILE}"
+  chmod a+x "\${ZSH_SCLINK_FILE}"
   $org
 }
 HERE
