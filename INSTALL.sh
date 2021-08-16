@@ -26,6 +26,8 @@ echo "export WTTR_LOCATION=""'""$wttr""'" >> config
 _hasCommand zsh  || echo "WARNING: zsh  is not found!"
 _hasCommand perl || echo "WARNING: perl is not found!"
 _hasCommand git  || echo "WARNING: git  is not found!"
+_hasCommand go && go get github.com/syumai/uuidgenseeded \
+              || echo -e "WARNING: go   is not found!\n note: 'uuidgenseeded' does not install." \
 
 curl -fsSL git.io/antigen > $HOME/.zsh/custom-available.d/antigen.zsh
 
