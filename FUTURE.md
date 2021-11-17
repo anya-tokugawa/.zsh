@@ -21,3 +21,9 @@
 - File Transfering by distro. to distro.
 - fast mounting usb disk (with WSL.EXE)
 
+## Jump Dir.
+
+- history-path command.(change dir previous path)
+- jump other terminal working dir.
+- Prompt Fix(display ttyNumber, cut `$HOME` )
+- 
