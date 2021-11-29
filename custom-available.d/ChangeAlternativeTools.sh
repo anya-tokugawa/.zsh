@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="ChangeAlternativeTools:${ZTTY_FEATURES}"
 
 _hasCommand () {
   type "$1" > /dev/null 2>&1 && return 0

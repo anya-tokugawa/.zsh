@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="MakeWithUUID:${ZTTY_FEATURES}"
 # Require: https://github.com/syumai/uuidgenseeded
 
 function mkuuidfile() {

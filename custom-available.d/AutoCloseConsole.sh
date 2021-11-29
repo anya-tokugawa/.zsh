@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="AutoCloseConsole:${ZTTY_FEATURES}"
 # Auto Close Console Feature
 # 30s * 4 -> 120s = 2min
 A3C_STARTUP=1
@@ -47,6 +48,7 @@ then
     echo -n "A3C STARTUP Enabled - "
     AutoCloseConsoleChecker &
     A3C_PID=$!
+    export ZTERM_A3C_PID=$A3C_PID
 fi
 alias autoexit='noautoexit ; wait && echo -en "\e[38;5;082m A3C" ; AutoCloseConsoleChecker & A3C_PID=$!'
 function noautoexit(){
@@ -55,4 +57,4 @@ function noautoexit(){
             echo -en "\e[38;5;196m A3C" ; kill -9 "$A3C_PID"
     fi
 }
-alias exit='noautoexit ; wait && exit'
+

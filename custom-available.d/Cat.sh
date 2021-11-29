@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="Cat:${ZTTY_FEATURES}"
 # 2020-02-24: catコマンドを拡張子別に変更
 function cat(){
     # ヒアドキュメント判定

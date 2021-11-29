@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="DstaskZshCompletions:${ZTTY_FEATURES}"
 #compdef pass
 #autoload
 

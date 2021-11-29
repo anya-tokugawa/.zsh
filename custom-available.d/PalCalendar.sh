@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="PalCalendar:${ZTTY_FEATURES}"
 palFileName=$(grep '^file' ~/.pal/pal.conf | cut -d' ' -f2)
 palFilePath="$HOME/.pal/$palFileName"
 [ $(which pal | wc -l) -eq 1 ] && palPath=$(which pal)

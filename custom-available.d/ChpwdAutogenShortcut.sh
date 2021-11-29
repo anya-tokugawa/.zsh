@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="ChpwdAutogenShortcut:${ZTTY_FEATURES}"
 
 _scLinkDir="$HOME/links/"
 mkdir -p $_scLinkDir

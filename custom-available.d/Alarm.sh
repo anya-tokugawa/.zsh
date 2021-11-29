@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="Alarm:${ZTTY_FEATURES}"
 export ZTTY_PATH=$TTY
 function alarm(){
   if [[ $# -lt 2 ]]

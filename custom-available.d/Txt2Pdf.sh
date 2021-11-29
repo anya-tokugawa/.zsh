@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="Txt2Pdf:${ZTTY_FEATURES}"
 function txt2pdf(){
   if [[ $# -ne 2 ]]
   then

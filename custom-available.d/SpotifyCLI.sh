@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="SpotifyCLI:${ZTTY_FEATURES}"
 if $(spotify > /dev/null 2>&1 ); then
   function -next     { spotify next   $@ }
   function -pause    { spotify pause  $@ }

@@ -1,3 +1,5 @@
+export ZTTY_FEATURES="Dstask:${ZTTY_FEATURES}"
+
 d() {
   if [[ "$1" ==  "" ]]
   then

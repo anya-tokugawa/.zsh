@@ -1,3 +1,4 @@
+export ZTTY_FEATURES="SimpleTask:${ZTTY_FEATURES}"
 ##################################################
 export  TASK_DIR="$HOME/.task"
 export _indexFile="${TASK_DIR}/index.psv"

@@ -214,8 +214,11 @@ done
 
 
 
-
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
+
+#source $ZDOTDIR/logout.sh
+#alias exit="_logout; exit"
+alias exit="source ${ZDOTDIR}/.zlogout; exit"
 
 rm $ZLOCKFILE
