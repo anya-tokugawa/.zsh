@@ -18,3 +18,11 @@ if [ -v ZTERM_A3C_PID ];then
   _wait_proc "$ZTERM_A3C_PID"
   unset ZTERM_A3C_PID
 fi
+########################################
+# WindowsTerminal WSL Integration
+parentProcName="$(ps axo pid,comm | grep " $PPID " | awk '{print $2}')"
+echo "$parentProcName"
+
+if [[ -n "$WSL_DISTRO_NAME" ]] && [[ "$parentProcName" == "init" ]];then
+  exit 0 # Normally exit.
+fi
