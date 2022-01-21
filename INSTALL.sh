@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 
 _hasCommand () {
   type "$1" > /dev/null 2>&1 && return 0
@@ -12,6 +12,11 @@ _setConfig(){
   fi
   ln -s $1 $2
 }
+
+if ! _hasCommand zsh ;then
+  echo "zsh command not found. exit..."
+  exit 1
+fi
 
 echo -n "Input current workspace name -> "
 read ws_name
@@ -29,10 +34,15 @@ _hasCommand git  || echo "WARNING: git  is not found!"
 _hasCommand go && go get github.com/syumai/uuidgenseeded \
               || echo -e "WARNING: go   is not found!\n note: 'uuidgenseeded' does not install." \
 
+set -e
+
 curl -fsSL git.io/antigen > $HOME/.zsh/custom-available.d/antigen.zsh
 
-ln -s $HOME/.zsh/.zshenv $HOME/
-
+if [[ ! -f "$HOME/.zshenv" ]];then
+  ln -s $HOME/.zsh/.zshenv $HOME/
+else
+  echo "WARNING: ~/.zshenv exist. "
+fi
 mkdir -p $HOME/.zsh/custom-enable.d/
 mkdir -p $HOME/.zsh/custom.d/
 touch    $HOME/.zsh/MEMO.txt
@@ -45,6 +55,8 @@ _setConfig  ${dotBase}/bash_run_cmd.sh $HOME/.bashrc # .bashrc
 _setConfig  ${dotBase}/htop_run_cmd.config $HOME/.config/htop/htoprc
 _setConfig  ${dotBase}/tmux.conf $HOME/.tmux.conf
 
+# replace bash
+cp ~/.bashrc ~/bashrc.default.bk && cp src.dotfiles/bash_run_cmd.sh ~/.bashrc
 
 
 

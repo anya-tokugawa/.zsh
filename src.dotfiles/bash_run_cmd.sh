@@ -117,12 +117,13 @@ if ! shopt -oq posix; then
 fi
 
 # MOVE to zsh.
-function run-zsh(){
+run-zsh(){
 /usr/bin/env zsh
 ZSH_EXIT_CODE=$?
 if [[ $ZSH_EXIT_CODE -ne 14 ]] #SIGALRM
 then
 	exit 0 # exit bash
+  :
 fi
 }
 if [[ $RUN_ZSH -eq 0 ]]
