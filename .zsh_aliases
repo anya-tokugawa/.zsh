@@ -83,3 +83,5 @@
     function histgrep(){
      history-all | grep "$@"
     }
+    # export PATH here.
+    alias exportpathwd='export PATH="$PWD:$PATH"'
