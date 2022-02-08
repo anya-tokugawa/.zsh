@@ -56,8 +56,6 @@ _setConfig  "${dotBase}/bash_run_cmd.sh" "$HOME/.bashrc" # .bashrc
 _setConfig  "${dotBase}/htop_run_cmd.config" "$HOME/.config/htop/htoprc"
 _setConfig  "${dotBase}/tmux.conf" "$HOME/.tmux.conf"
 
-# replace bash
-cp ~/.bashrc ~/.bashrc.default.bk && cp src.dotfiles/bash_run_cmd.sh ~/.bashrc
 
 
 
