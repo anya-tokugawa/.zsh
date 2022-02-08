@@ -8,9 +8,9 @@ _hasCommand () {
 _setConfig(){
   if [[ -f $2 ]]
   then
-    mv $2 $2.default-config
+    mv "$2" "$2.default-config"
   fi
-  ln -s $1 $2
+  ln -s "$1" "$2"
 }
 
 if ! _hasCommand zsh ;then
@@ -19,11 +19,11 @@ if ! _hasCommand zsh ;then
 fi
 
 echo -n "Input current workspace name -> "
-read ws_name
+read -r ws_name
 echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
 
 echo -n "Input Wttr.in Location -> "
-read wttr
+read -r wttr
 echo "export WTTR_LOCATION=""'""$wttr""'" >> config
 
 # Dependency
@@ -36,24 +36,25 @@ _hasCommand go && go get github.com/syumai/uuidgenseeded \
 
 set -e
 
-curl -fsSL git.io/antigen > $HOME/.zsh/custom-available.d/antigen.zsh
+curl -fsSL git.io/antigen > "$HOME/.zsh/custom-available.d/antigen.zsh"
 
 if [[ ! -f "$HOME/.zshenv" ]];then
-  ln -s $HOME/.zsh/.zshenv $HOME/
+  ln -s "$HOME/.zsh/.zshenv" "$HOME"
 else
   echo "WARNING: ~/.zshenv exist. "
 fi
-mkdir -p $HOME/.zsh/custom-enable.d/
-mkdir -p $HOME/.zsh/custom.d/
-touch    $HOME/.zsh/MEMO.txt
-mkdir -p $HOME/.local/packages
+mkdir -p "$HOME/.zsh/custom-enable.d"
+mkdir -p "$HOME/.zsh/custom.d"
+mkdir -p "$HOME/.zsh/TMUX_SESSIONS"
+touch    "$HOME/.zsh/MEMO.txt"
+mkdir -p "$HOME/.local/packages"
 
 
 # linked dotFiles
 dotBase="$HOME/.zsh/src.dotfiles"
-_setConfig  ${dotBase}/bash_run_cmd.sh $HOME/.bashrc # .bashrc
-_setConfig  ${dotBase}/htop_run_cmd.config $HOME/.config/htop/htoprc
-_setConfig  ${dotBase}/tmux.conf $HOME/.tmux.conf
+_setConfig  "${dotBase}/bash_run_cmd.sh" "$HOME/.bashrc" # .bashrc
+_setConfig  "${dotBase}/htop_run_cmd.config" "$HOME/.config/htop/htoprc"
+_setConfig  "${dotBase}/tmux.conf" "$HOME/.tmux.conf"
 
 # replace bash
 cp ~/.bashrc ~/.bashrc.default.bk && cp src.dotfiles/bash_run_cmd.sh ~/.bashrc

@@ -73,6 +73,7 @@ declare -rx PAGEOR=`which more`
 : "GIT ACCESS FS"
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
+export TMUX_TMPDIR="$ZDOTDIR/TMUX_SESSIONS/"
 
 export ZSH_TASKS="${HOME}/.ztasks"
 : "Load Profile"
