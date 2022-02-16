@@ -1,3 +1,4 @@
+#Description: spotify short cmd.
 export ZTTY_FEATURES="SpotifyCLI:${ZTTY_FEATURES}"
 if $(spotify > /dev/null 2>&1 ); then
   function -next     { spotify next   $@ }

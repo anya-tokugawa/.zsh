@@ -1,3 +1,4 @@
+#Description: Dstask Integration
 export ZTTY_FEATURES="Dstask:${ZTTY_FEATURES}"
 
 d() {

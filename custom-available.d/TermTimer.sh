@@ -1,3 +1,4 @@
+# Description: Timer with TTY
 export ZTTY_FEATURES="TermTimer:${ZTTY_FEATURES}"
 export ZTTY_PATH=$TTY
 TIMER_LIST=""

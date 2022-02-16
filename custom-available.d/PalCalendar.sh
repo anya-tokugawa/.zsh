@@ -1,3 +1,4 @@
+#Description: pal Integration
 export ZTTY_FEATURES="PalCalendar:${ZTTY_FEATURES}"
 palFileName=$(grep '^file' ~/.pal/pal.conf | cut -d' ' -f2)
 palFilePath="$HOME/.pal/$palFileName"

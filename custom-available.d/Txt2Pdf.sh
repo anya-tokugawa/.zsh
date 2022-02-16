@@ -1,3 +1,4 @@
+# Description: txt2pdf with enscript and ps2pdf
 export ZTTY_FEATURES="Txt2Pdf:${ZTTY_FEATURES}"
 function txt2pdf(){
   if [[ $# -ne 2 ]]

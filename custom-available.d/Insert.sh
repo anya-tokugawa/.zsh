@@ -1,3 +1,4 @@
+# Description: insert cmd.
 export ZTTY_FEATURES="Insert:${ZTTY_FEATURES}"
 function insert(){
   if [[ $# == 0 || $1 == '-h' ]]

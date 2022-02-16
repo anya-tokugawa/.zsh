@@ -1,3 +1,4 @@
+#Description: Change WorkingDirectory of AnotherTTY
 export ZTTY_FEATURES="ChpwdAutogenShortcut:${ZTTY_FEATURES}"
 
 _scLinkDir="$HOME/links/"

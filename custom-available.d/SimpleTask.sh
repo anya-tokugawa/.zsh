@@ -1,3 +1,5 @@
+# Description: Simple Task Manager
+
 export ZTTY_FEATURES="SimpleTask:${ZTTY_FEATURES}"
 ##################################################
 export  TASK_DIR="$HOME/.task"
@@ -9,7 +11,7 @@ mkdir -p "$TASK_DIR/note.d/"
 
 if [[ ! -e ${TASK_DIR}/.git ]]
 then
-  git init $TASK_DIR
+	  echo  "WARNING: No SimpleTask Repository exist: $TASK_DIR"
 fi
 
 function _task_list() {
@@ -250,6 +252,9 @@ function _task_note(){
 ##################################
 function _task_show(){
   indexLength=$(wc -l $_indexFile | awk '{print $1}')
+  if [[ "$indexLength" == "" ]];then
+	  continue
+  fi
   if [[ $indexLength -gt $(tput lines) ]]
   then
     outopts="less -SR"
@@ -334,6 +339,7 @@ HELP_LONG_TEXT
 function t(){
   case "$1" in
     "add")  _task_add ${@:2} ;;
+    "tags") _task_tags ${@:2} ;;
     "done") _task_done $2 ;;
     "edit") _task_edit $2 ;;
     "read") _task_read $2 ;;
@@ -344,7 +350,6 @@ function t(){
     "pin")  _task_pin $2 ;;
     "sync") _task_sync ;;
     "log")  _task_log  ;;
-    "tags") _task_tags ${@:2} ;;
     "help") _task_help ;;
     "lhelp") _task_long_help ;;
     *)      _task_show $@;;

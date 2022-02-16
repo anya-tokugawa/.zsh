@@ -1,3 +1,4 @@
+# Descripton: WSL Auto ChangeDirt to HOME
 export ZTTY_FEATURES="WslAutoChangeDir:${ZTTY_FEATURES}"
 # DETECT WINDOWS STARTUP_PATH
 if [[ "$PWD" =~ "/mnt/c/.*/eric/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup" ]]

@@ -1,3 +1,4 @@
+#Description: git-oneline command.
 export ZTTY_FEATURES="GitLongCmd:${ZTTY_FEATURES}"
 function git-remove-all-history(){
 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $@" --prune-empty --tag-name-filter cat -- --all

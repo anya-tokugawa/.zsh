@@ -1,3 +1,4 @@
+#Description: zsh history rotate
 export ZTTY_FEATURES="RotateZshHistory:${ZTTY_FEATURES}"
 export ZSH_HIST_ROTATEDATE="$HOME/.zsh_historys/update"
 export ZSH_HIST_BACKUPDIR="$HOME/.zsh_historys"

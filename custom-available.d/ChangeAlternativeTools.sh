@@ -1,3 +1,4 @@
+#Description: alias alternative cmd. to basic cmd.
 export ZTTY_FEATURES="ChangeAlternativeTools:${ZTTY_FEATURES}"
 
 _hasCommand () {

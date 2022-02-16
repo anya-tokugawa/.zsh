@@ -1,10 +1,11 @@
+#Description: Auto Close Console when no running 5min
 export ZTTY_FEATURES="AutoCloseConsole:${ZTTY_FEATURES}"
 # Auto Close Console Feature
 # 30s * 4 -> 120s = 2min
 A3C_STARTUP=1
 # CheckBowlingTime
-BOW_TIME=30
-CHECK_BOW=4
+BOW_TIME=5
+CHECK_BOW=60
 
 
 

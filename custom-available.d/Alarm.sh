@@ -1,3 +1,4 @@
+#Description: Set Alarm at TTY
 export ZTTY_FEATURES="Alarm:${ZTTY_FEATURES}"
 export ZTTY_PATH=$TTY
 function alarm(){

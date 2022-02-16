@@ -1,3 +1,4 @@
+#Description: Fast Calculator
 export ZTTY_FEATURES="Calc:${ZTTY_FEATURES}"
 _calc_usage(){
 cat << USAGE

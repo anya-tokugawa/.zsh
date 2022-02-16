@@ -1,0 +1,2 @@
+#Description: [description for TUI]
+export ZTTY_FEATURES="[SCRIPTNAME]:${ZTTY_FEATURES}"
