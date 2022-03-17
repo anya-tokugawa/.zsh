@@ -1,78 +1,67 @@
 source $ZDOTDIR/config
-
-: "PROMPT"
-# 20200301:
-# - /etc/zshrc にPROMPT変数が定義されている。
-# - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
-# - よって、.zshenv だと上書きされてしまう事象（CentOS 7)
-
-#PROMPT="%K{black}%F{3}${HOST} %F{cyan}<"$IP_ADDRESSES"> "'${vcs_info_msg_0_}'"%F{reset}%K{reset}
-#%K{0} %F{7} [%~] %#%K{reset}%F{reset} "
-#
-#
 PREPWD=''
 term_time=$(date +%s)
-notifySec=4 #30 # 実行時間N秒以上の場合，処理する．
-#function before_runcmd(){
-#  echo "BT: "
-#  term_time=$(date +%s)
-#}
-#trap 'before_runcmd' DEBUG
-function precmd () {
-      if [[ $? -eq 0 ]]
-      then
-        STATUS_COLOR='%F{46}'  # Green is true.
-      else
-        STATUS_COLOR='%F{196}' # Red is false.
-      fi
-      new_term_time=$(date +%s)
-      last_cmds=$(fc -l -1 | head -n1 | cut -c8-)
-      last_cmd=$(echo $last_cmds | cut -d' ' -f1)
-      # 多く処理した場合は，通知する
-      if [[ $(( $new_term_time - $term_time )) -gt $notifySec ]] && [[ -f ~/.slackrc ]]
-      then
-        #source ~/.slackrc
-        #POST_TEXT="$last_cmd is end."
-        #post_slack
-        : "current disabled."
-      fi
-      term_time=$new_term_time
-
-      if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
-      if [[ "$last_cmd" =~ 'vi.*'  ]]  ; then vcs_info; fi
-      if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
-      if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
-      PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-      PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
+#typeset -g -a arr1
+##################################
+## chpwd: change workdir.
+function chpwd() {
+  test $(/bin/ls -1 | wc -l) -gt 10 && ls || ll
+}
+## precmd: before show prompt
+function precmd() {
+  local s=$(echo $s 2>/dev/null ) 
+  echo precmd
+  fc -l 1 | tail -1
+  echo --------
+  if [[ $s -eq 0 ]];then
+    STATUS_COLOR='%F{46}'  # Green is true.
+  else
+    STATUS_COLOR='%F{196}' # Red is false.
+  fi
+  if [[ "$last_cmd" == 'git'  ]]  ; then vcs_info; fi
+  if [[ "$last_cmd" =~ 'vi.*'  ]]  ; then vcs_info; fi
+  if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
+  if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
+  PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
+  vcs_info
+  PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
 %F{250}%T %F{207} ~ %F{reset} "
+  new_term_time=$(date +%s)
+  #last_cmds=$(fc -l -1 | head -n1 | cut -c8-)
+  #last_cmd=$(echo $last_cmds | cut -d' ' -f1)
+  if [[ $(( $new_term_time - $term_time )) -gt $notifySec ]] && [[ -f ~/.slackrc ]];then
+  #notify-send
+  fi
+  term_time=$new_term_time
+}
+## preexec: before exec command.
+function preexec() {
+  echo preexec
+  echo -n ${1%%$}
+  echo -----
+  fc -l | tail -1
+}
+## periodic: polling with PERIOD sec.
+PERIOD=5
+function periodic() {
 
 }
-vcs_info
-PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-PROMPT="
-%F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
-%F{250}%T %F{207} ~ %F{reset} "
-
-
-
-
-#test
-#add-zsh-hook precmd vcs_info
-
-if test "$(whoami)" == "root"
-then
-cat <<ATTENT
-====================
-HELLO ADMIN PROMPT!
-====================
-ATTENT
-fi
-RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
-
-
-# INFO
-#echo "$HOST - $IP_ADDRESSES"
-#echo "----------------------------------"
+#####
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd chpwd
+add-zsh-hook periodic periodic
+#add-zsh-hook precmd precmd
+add-zsh-hook preexec preexec
+add-zsh-hook zshaddhistory zshaddhistory
+########################################################################
+#PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
+# PROMPT="
+# %F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
+# %F{250}%T %F{207} ~ %F{reset} "
+#RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
+precmd
+######################################################
+# TODO: ZSH Auto Update to Extension.
 : "Check Update"
 	function zsh_update() {
         cd  $ZDOTDIR
@@ -90,8 +79,9 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
     }
     # バックグラウンドで実行
   zsh_update &! # bash の & disown 相当
+
 : "Define Function"
-    function chpwd() { test $(/bin/ls -1 | wc -l) -gt 10 && ls || ll }
+
 : "Note Command"
     function @(){
         if [ $# -eq 0 ]
@@ -126,11 +116,23 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
         fi
     }
 : "zshaddhistory Process"
+mkdir -p "$ZSH_HIST_DIR"
+
+# zshaddhistory call  before running command
 zshaddhistory() {
-  local line=${1%%$'\n'}
-  local cmd=${line%% *}
-  test $(echo ${line} |grep -o '\n' |wc -l)  -lt 10 || echo '*no Insert History'
+  # TODO: ESCAPE Variable
+  #################################
+  # CMD HTML HISTORY
+  local now_date="$(date +'%Y-%m-%d')"
+  local now_time="$(date +'%H:%M:%S')"
+  local now_epoc="$(date +'%s')"
+  local hist_file="$ZSH_HIST_DIR/${now_date}.html"
+  test -e "$hist_file" || echo "<h1>$now_date</h1><table border=\"1\"><tr><th>Time</th><th>WD</th><th>Cmd</th><th>Spend</th></tr>" >> "$hist_file"
+  echo "<tr><td><time datetime=\"$now_time\">$now_time</time></td><td>$PWD</td><td><pre>" >> "$hist_file"
+  echo -n ${1%%$} >> "$hist_file"
+  echo "</pre></td></tr>" >> "$hist_file"
 }
+
 
 # Memo書き込み関数(alias @write)
 function memo_write(){
@@ -222,3 +224,11 @@ declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 alias exit="source ${ZDOTDIR}/.zlogout; exit"
 
 rm $ZLOCKFILE
+# Tmux Auto Run
+if [[ -v TMUX_AUTO_START_ENABLE ]];then
+  if [[ $isRunningTmux -eq 0 ]];then
+    # new Tmux.
+   export ZSH_TMUX_SESSNAME="ses-$(date +'%Y%m%d-%H%M%S')"
+   tmux new -s "$ZSH_TMUX_SESSNAME"
+  fi
+fi

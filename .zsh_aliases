@@ -83,5 +83,12 @@
     function histgrep(){
      history-all | grep "$@"
     }
+    # google
+    function google(){
+      echo -n "keywords: "
+      read q
+      browse "https://www.google.com/search?q=$q"
+      
+    }
     # export PATH here.
     alias exportpathwd='export PATH="$PWD:$PATH"'
