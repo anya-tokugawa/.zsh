@@ -2,9 +2,10 @@ PATH_LIST=$(cat << EOF | xargs | sed -e 's/\ /:/g'
 $HOME/bin
 $HOME/.local/bin
 $HOME/local/bin
-$HOME/go/bin
+$HOME/.go/bin
 $HOME/.cargo/bin
 $HOME/.nesc/bin
+$HOME/.deno/bin
 EOF
 )
 export PATH="$PATH_LIST:$PATH"
