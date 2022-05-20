@@ -20,7 +20,8 @@ function check_booting(){
 		fi
 		if [[ $boot_cnt -ge 10 ]]
 		then
-			kill -14 $$
+      echo "Zsh Booting Failure....  Will Close Zsh...."
+      kill -12 $$ # SIGNAL 12 is used Fallbacking.
       return 1
 		fi
 		boot_cnt=$((++boot_cnt))
@@ -76,5 +77,10 @@ export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 export TMUX_TMPDIR="$ZDOTDIR/TMUX_SESSIONS/"
 
 export ZSH_TASKS="${HOME}/.ztasks"
+
+: "Go"
+export GOPATH="${HOME}/.go/"
+
+
 : "Load Profile"
 source $ZDOTDIR/.zprofile

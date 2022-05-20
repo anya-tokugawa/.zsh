@@ -105,25 +105,16 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
 # MOVE to zsh.
 run-zsh(){
 /usr/bin/env zsh
 ZSH_EXIT_CODE=$?
-if [[ $ZSH_EXIT_CODE -ne 14 ]] #SIGALRM
-then
-	exit 0 # exit bash
-  :
+if [[ $ZSH_EXIT_CODE == 140 ]];then # kill -12
+  echo SIG_USR1 Zsh Boot Failure. Fallbacking to bash....
+  return 0;
+fi
+if [[ $ZSH_EXIT_CODE -le 1 ]];then
+  exit 0; # bash exit
 fi
 }
 if [[ $RUN_ZSH -eq 0 ]]
