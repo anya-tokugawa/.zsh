@@ -13,19 +13,20 @@ export HISTFILE="${HISTBASEDIR}/${t3}${t2}${t1}.log"
 mkdir -p "$(dirname "$HISTFILE")"
 fc -W # Write History
 }
+_histinclude(){
+find "$HISTBASEDIR" -type f -name "*.log" | sort | xargs -I% cat % > "${ZDOTDIR}/.zsh_history" 2>/dev/null
+
+}
 
 hs(){
   set -x
-  find "$HISTBASEDIR" -type f -name "*.log" | xargs -P10 -I% cat % > "$HISTBASEDIR/ALL.TXT"
-  (export HISTFILE="$HISTBASEDIR/ALL.TXT"; hstr)
+  hstr
   set +x
 }
 setopt histignorespace           # skip cmds w/ leading space from history
 export HSTR_CONFIG=hicolor       # get more colors
 bindkey -s "\C-r" "\C-a hstr -- \C-j"     # bind hstr to Ctrl-r (for Vi mode check doc))
 
-
-
-find "$HISTBASEDIR" -type f -name "*.log" | sort | xargs -I% cat % > "${ZDOTDIR}/.zsh_history" 2>/dev/null
+_histinclude &!
 export HISTFILE="${ZDOTDIR}/.zsh_history"
 
