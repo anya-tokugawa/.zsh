@@ -1,4 +1,9 @@
 #!/bin/bash -eu
+_hasCommand() {
+  type "$1" > /dev/null 2>&1 && return 0
+  return 1
+}
+_hasCommand dialog || ( echo "'dialog' command not found." ; exit 1 )
 ca="${ZDOTDIR}/custom-available.d/"
 ce="${ZDOTDIR}/custom-enable.d/"
 names=$(find "$ca" -type f | xargs -L1 basename |sed -e 's;\..*sh$;;g')
@@ -25,7 +30,7 @@ do
 done <<< "$names"
 find "$ce" -type l | xargs -r rm -v
 
-
+echo " Will Open Dialog"
 exec 3>&1
 enables="$(eval "dialog $checklists" 2>&1 1>&3)"
 exec 3>&-
@@ -39,3 +44,9 @@ do
 	ln -s "$cap" "$cep"
 	echo "Enabled: $name"
 done
+
+echo "Restarting zsh...."
+sleep 0.8
+exec zsh
+
+
