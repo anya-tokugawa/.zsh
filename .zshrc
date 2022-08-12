@@ -43,15 +43,18 @@ function precmd () {
       if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
       if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
       PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-      PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"%F{154} -> ${TASK} %F{reset}
-%F{250}%T %F{207} ~ %F{reset} "
+      if [[ "$TASK" != "" ]];then
+        task_prompt="%F{154} -> $TASK"
+      fi
+      PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{reset}
+%F{207}> %F{reset}"
 
 }
 vcs_info
 PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
 PROMPT="
 %F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
-%F{250}%T %F{207} ~ %F{reset} "
+%F{207}~ %F{reset} "
 
 
 
@@ -91,8 +94,12 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
     # バックグラウンドで実行
   zsh_update &! # bash の & disown 相当
 : "Define Function"
-    function chpwd() { test $(/bin/ls -1 | wc -l) -gt 10 && ls || ll }
-: "Note Command"
+  chpwd() {
+    l3=$(( COLUMNS / 4 ))
+    l4=$(( l3 * 2 ))
+    echo "< $(pwd | perl -pe 's;^(.{'"$l3"',}?/)(.+)(/.{'"$l4"',})$;$1...$3;')"
+  }
+      : "Note Command"
     function @(){
         if [ $# -eq 0 ]
         then
@@ -217,11 +224,11 @@ done
 # ファイル上のメモを参照
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
+# Trap exit to run .zlogout
 #source $ZDOTDIR/logout.sh
 #alias exit="_logout; exit"
-alias exit="source ${ZDOTDIR}/.zlogout; exit"
+#alias exit="source ${ZDOTDIR}/.zlogout; exit" # duplicate. 
 
-# Trap exit to run .zlogout
 
 TRAPEXIT() {
     # commands to run here, e.g. if you
