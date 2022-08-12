@@ -55,14 +55,18 @@ done
 export HOSTALIASES="~/.hosts"
 
 : "LOCATION"
-export LANG="ja_JP.UTF-8"
-export LC_ALL="ja_JP.UTF-8"
 export LANGUAGE="ja"
+export LANG="ja_JP.UTF-8"
+export LC_NUMERIC=C
+export LC_TIME=C
+export LC_MONETARY="ja_JP.UTF-8"
+export LC_COLLATE="ja_JP.UTF-8"
+export LC_MESSAGES=C
 
 : "DEFAULT EDITOR"
-declare -rx EDITOR=`which vim`
+declare -x EDITOR=`which vim`
 : "DEFAULT PAGEOR"
-declare -rx PAGEOR=`which more`
+declare -x PAGEOR=`which more`
 
 : "IP_ADDRESS"
 #declare -a -x IP_ADDRESSES
