@@ -1,4 +1,10 @@
 #!/bin/bash
+################# LIBRARY TEMPLATE ##################
+LIBNAME="$(readlink -f "$0")"; CURRENT_SHELL="$(ps -p $$ -ho cmd| head -1) "
+grep -qxF "$LIBNAME" <( tr ':' '\n' <<< "$SH_READ_LIB" ) || return 1
+test "$(basename "$CURRENT_SHELL")" == "bash" || return 1
+export SH_READ_LIB="$LIBNAME:$SH_READ_LIB"
+################# LIBRARY TEMPLATE ##################
 
 _checkDepend() {
   cmdname="$1"
