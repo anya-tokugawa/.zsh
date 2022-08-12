@@ -1,60 +1,35 @@
 #!/bin/bash -u
-source /etc/lsb-release
-INSTALL_CMD=":"
-case "$DISTRIB_ID" in
-  "Ubuntu")
-    echo "Type: Ubuntu(APT)"
-    INSTALL_CMD="sudo apt install"
-    ;;
-esac
+source lib/common.bash
+source lib/depend_install.bash
 
-_hasCommand() {
-  type "$1" > /dev/null 2>&1 && return 0
-  return 1
-}
+if [[ $# -ne 2 ]];then
+  echo "usage: $0 [workspace_name] [PC_Location (Weather)]"
+  exit 1
+fi
 
-_setConfig() {
-  if [[ -f $2 ]]; then
-    mv "$2" "$2.default-config"
-  fi
-  ln -s "$1" "$2"
-}
-_yesno() {
-  while :; do
-    read p
-    case "$p" in
-      "y") return 0 ;;
-      "n") return 1 ;;
-    esac
-    echo -n "(y/n): "
-  done
-}
+INSTALL_CMD="$(_installPrefixCmd)"
+current_login_shell="$(grep "^$USER" /etc/passwd | cut -d: -f7)"
 
-if ! _hasCommand zsh; then
-  echo -n "zsh command not found. Install Now(y/n): "
-  if _yesno; then
-    eval "$INSTALL_CMD zsh"
-  else
-    echo exiting.
-    exit 1
+if [[ "$(basename "$current_login_shell")" != "bash" ]]; then
+  echo "WARNING: Current LoginShell is \"$current_login_shell\""
+fi
+
+# Dependency
+_checkDepend "zsh" "zsh" 1
+_checkDepend "perl" "perl" 1
+_checkDepend "git" "git" 1
+_checkDepend "go" "golang" 0 || echo "WARNING: uuidgenseeded can't install."
+_checkDepend "autojump" "autojump" 0 || echo "WARNING: autojump extension will not able to be enabled."
+
+if _hasCommand go; then
+  if ! _hasCommand uuidgenseeded; then
+    echo "Try install uuidgenseeded"
+    go get github.com/syumai/uuidgenseeded
   fi
 fi
 
-echo -n "Input current workspace name -> "
-read -r ws_name
-echo "export ZSH_WORKSPACE=""'""$ws_name""'" >> config
-
-echo -n "Input Wttr.in Location -> "
-read -r wttr
-echo "export WTTR_LOCATION=""'""$wttr""'" >> config
-
-# Dependency
-
-_hasCommand zsh || echo "WARNING: zsh  is not found!"
-_hasCommand perl || echo "WARNING: perl is not found!"
-_hasCommand git || echo "WARNING: git  is not found!"
-_hasCommand go && go get github.com/syumai/uuidgenseeded ||
-  echo -e "WARNING: go   is not found!\n note: 'uuidgenseeded' does not install."
+echo "export ZSH_WORKSPACE=""'""$1""'" >> config
+echo "export WTTR_LOCATION=""'""$2""'" >> config
 
 set -e
 
@@ -63,12 +38,11 @@ curl -fsSL git.io/antigen > "$HOME/.zsh/custom-available.d/antigen.zsh"
 if [[ ! -f "$HOME/.zshenv" ]]; then
   ln -s "$HOME/.zsh/.zshenv" "$HOME"
 else
-  echo "WARNING: ~/.zshenv exist. "
+  echo "INFO: ~/.zshenv exist. "
 fi
 
 mkdir -p "$HOME/.zsh/custom-enable.d"
 mkdir -p "$HOME/.zsh/custom.d"
-mkdir -p "$HOME/.zsh/TMUX_SESSIONS"
 touch "$HOME/.zsh/MEMO.txt"
 mkdir -p "$HOME/.local/packages"
 
