@@ -11,11 +11,6 @@ if _hasCommand exa ; then
   alias la="exa -a"
   alias ll='ls --git -lbghu'
   # overwrite chpwd function
-  chpwd() {
-    l1=$(/bin/ls -1 | wc -l)
-    l2=$(tput lines)
-    test $l1 -gt $(( $l2 * 5 ))  && echo "manymanyfiles... $l1" && return 0
-  }
 fi
 
 while read line
