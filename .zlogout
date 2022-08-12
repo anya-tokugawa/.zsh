@@ -26,3 +26,8 @@ echo "$parentProcName"
 if [[ -n "$WSL_DISTRO_NAME" ]] && [[ "$parentProcName" == "init" ]];then
   exit 0 # Normally exit.
 fi
+
+#### History Write
+if ( tr ':' '\n' <<< "$ZTTY_FEATURES" | grep -qxF "RotateZshHistory");then
+  _writeHistoryWithDate
+fi

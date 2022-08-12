@@ -221,4 +221,13 @@ declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 #alias exit="_logout; exit"
 alias exit="source ${ZDOTDIR}/.zlogout; exit"
 
+# Trap exit to run .zlogout
+
+TRAPEXIT() {
+    # commands to run here, e.g. if you
+    # always want to run .zlogout:
+      source "${HOME}/.zsh/.zlogout"
+}
+
+
 rm $ZLOCKFILE
