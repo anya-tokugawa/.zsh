@@ -13,8 +13,8 @@ _checkDepend() {
   # Not Found.
   echo "INFO: $cmdname : NG" >&2
 
-  if [[ "$pkgname" != "" ]] || ""; then
-    echo -n "> $cmdname command not found."
+  if [[ "$pkgname" != "" ]] && [[ "$INSTALL_CMD" != "" ]]; then
+    echo "> $cmdname command not found."
     echo -n "> Install Now(y/n): "
     if _yesno; then
       set +e
