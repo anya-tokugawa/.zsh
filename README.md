@@ -1,5 +1,7 @@
 # .zsh
 
+![zsh design](assets/zsh.png)
+
 My ZSH Configuration
 
 ## Abst.
@@ -7,8 +9,8 @@ My ZSH Configuration
 - zsh my settings
 - automatic update conf using `git pull` in background.
 - no third-party extensions(e.g. oh-my-zsh)
-- custom-shell-extension in `custom-available.d/` ( symlink to `custom-enable.d/`)
-- Simple Inline Note (called `memo`)  extension
+- custom-shell-extension in `custom-available.d/` ( symlink to `custom-enable.d/`) [EXTENSIONS.md](EXTENSIONS.md)
+- Simple Inline Note (called `memo, @`)  extension
 - Simple Task Manager with git
 
 FUTURE: [see FUTURE.md](FUTURE.md)
@@ -27,35 +29,14 @@ Only 5 steps.
 ```sh
 cd
 
-git clone https://github.com/Eric-lightning/.zsh
+git clone https://github.com/anya-tokugawa/.zsh
 
 cd ~/.zsh
 
 chmod x INSTALL.sh
 
-./INSTALL.sh
-
-# IF ZSH WANT TO BE DEFAULT SHELL.
-sudo chsh -s /bin/zsh
-
-#-----------------------------
-# When you have no root permission and default-shell is bash
-
-cat <<EOF > ~/.bash_profile
-/path/to/zsh
-export ZSH_END=1
-
-if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
-fi
-EOF
-
-cat <<EOF > ~/.bashrc
-if [[ $ZSH_END = 1 ]];
-then
- exit
-fi
-EOF
+./INSTALL.sh [workspace name] [wttr weather location name]
+# auto replace to bash to zsh.(not chsh)
 ```
 
 ## Feature
@@ -113,9 +94,10 @@ memo: exist - GoodMorning
 
 ```sh
 cd .zsh
-,/enablePlugin.sh custom-available.d/[Plugin_File_name]
+./util.d/enablePlugin.sh custom-available.d/[Plugin_File_name]
+# or, TUI
+./util.d/manager.sh
 ```
-
 
 #### AutoCloseConsoleChecker(A3C) - `autoCloseConsole.sh`
 
@@ -169,6 +151,10 @@ d    un || untagged ...            -organised
 
 - else: `dstask [other_args]`
 
+#### WSL Notify to Windows
+
+More Description: https://qiita.com/anshz0802/items/1c317220f03319a64d2a
+
 #### Others
 
 - custom terminal startup shellscript can store to `custom.d/`(git ignored)
@@ -179,5 +165,4 @@ d    un || untagged ...            -organised
 
 ## Design
 
-![zsh design 20200701](assets/zsh.jpg)
 
