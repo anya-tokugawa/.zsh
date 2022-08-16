@@ -84,3 +84,4 @@ export GOPATH="${HOME}/.go/"
 
 : "Load Profile"
 source $ZDOTDIR/.zprofile
+. "$HOME/.cargo/env"
