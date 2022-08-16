@@ -37,7 +37,7 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' stagedstr "%F{yellow}(!)%F{red}"
 zstyle ':vcs_info:git:*' unstagedstr "%F{red}(?)%F{red}"
-zstyle ':vcs_info:*' formats "%F{green}^%b%c%u%f"
+zstyle ':vcs_info:*' formats "%r%F{green}^%b%c%u%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
 : "ZSH HISTORY"

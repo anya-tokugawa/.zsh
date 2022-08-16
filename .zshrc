@@ -43,18 +43,23 @@ function precmd () {
       if [[ "$last_cmd" =~ '.*\>.*' ]]  ; then vcs_info; fi
       if [[ "$last_cmd" == 'cd'   ]]  ; then vcs_info; fi
       PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-      if [[ "$TASK" != "" ]];then
-        task_prompt="%F{154} -> $TASK"
+      if [[ "$TASK" != "" ]] && [[ "${vcs_info_msg_0_}" != "" ]];then
+        PROMPT="%F{013}${vcs_info_msg_0_}%F{154}* $TASK
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+      elif [[ "$TASK" != "" ]];then
+        PROMPT="%F{154}* $TASK
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+      elif [[ "$vcs_info_msg_0_" != "" ]];then
+        PROMPT="%F{013}${vcs_info_msg_0_}
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+      else
+        PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207} > %F{reset}"
       fi
-      PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}:${PREPWD}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{reset}
-%F{207}> %F{reset}"
 
 }
 vcs_info
 PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
-PROMPT="
-%F{154}${ZSH_WORKSPACE}:%F{207}${PREPWD}%F{013}"' ${vcs_info_msg_0_}'"%F{reset}
-%F{207}~ %F{reset} "
+PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207}> %F{reset}"
 
 
 
