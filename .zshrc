@@ -195,6 +195,26 @@ function wttr(){
 _bootmsg "Define exit function"
 _exit_function(){
   memo_write
+########################################
+# check close process
+
+_wait_proc(){
+  while :
+  do
+    if ps "$1" 2>&1 >/dev/null ;then
+      continue
+    fi
+    break
+  done
+}
+
+# Auto Close Terminal
+
+if [ -v ZTERM_A3C_PID ];then
+  kill -15 "$ZTERM_A3C_PID"
+  _wait_proc "$ZTERM_A3C_PID"
+  unset ZTERM_A3C_PID
+fi
   # PPIDが`init`でRunningしているWSLの場合は、Exit 0で切らせる。
   test "$(ps -o comm "$PPID" | tail -n1)" = "init" && return 0
 }
@@ -220,13 +240,11 @@ declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
 # Trap exit to run .zlogout
 #source $ZDOTDIR/logout.sh
-#alias exit="_logout; exit"
-#alias exit="source ${ZDOTDIR}/.zlogout; exit" # duplicate. 
+alias exit="_exit_functiont; exit" # run _exit_function before exit
 
 
 TRAPEXIT() {
-    # commands to run here, e.g. if you
-    # always want to run .zlogout:
+      memo_write
       source "${HOME}/.zsh/.zlogout"
 }
 

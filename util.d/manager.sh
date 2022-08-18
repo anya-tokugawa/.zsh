@@ -41,7 +41,11 @@ do
 	cap="${ca}${name}.sh"
 	cep="${ce}${name}.sh"
 	#desc="$(grep -P '^\ *?#\ *?Descripton:.*$' "$cap" | head -1  | sed -e 's;^.*?Description:;;g')"; 2>/dev/null
+  if [[ -f "$cep" ]];then
+    echo "SKIP: $name"
+  else
 	ln -s "$cap" "$cep"
+  fi
 	echo "Enabled: $name"
 done
 
