@@ -1,6 +1,4 @@
-source $ZDOTDIR/config
-
-: "PROMPT"
+_bootmsg "Setting PROMPT"
 # 20200301:
 # - /etc/zshrc にPROMPT変数が定義されている。
 # - ${ZDOTDIR}/.zshenv のあとに /etc/zshrcを読み込む
@@ -60,12 +58,7 @@ ${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
 vcs_info
 PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
 PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207}> %F{reset}"
-
-
-
-
-#test
-#add-zsh-hook precmd vcs_info
+RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
 
 if test "$(whoami)" == "root"
 then
@@ -75,13 +68,8 @@ HELLO ADMIN PROMPT!
 ====================
 ATTENT
 fi
-RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
 
 
-# INFO
-#echo "$HOST - $IP_ADDRESSES"
-#echo "----------------------------------"
-: "Check Update"
 	function zsh_update() {
         cd  $ZDOTDIR
         #echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
@@ -96,15 +84,15 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
             fi
         fi
     }
-    # バックグラウンドで実行
+_bootmsg "Checking Update"
   zsh_update &! # bash の & disown 相当
-: "Define Function"
+_bootmsg "Define Functions [chpwd]"
   chpwd() {
     l3=$(( COLUMNS / 4 ))
     l4=$(( l3 * 2 ))
     echo "< $(pwd | perl -pe 's;^(.{'"$l3"',}?/)(.+)(/.{'"$l4"',})$;$1...$3;')"
   }
-      : "Note Command"
+_bootmsg "Define Functions [memo]"
     function @(){
         if [ $# -eq 0 ]
         then
@@ -137,14 +125,14 @@ RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
             done
         fi
     }
-: "zshaddhistory Process"
+_bootmsg "Define Functions [zshaddhistory]"
 zshaddhistory() {
   local line=${1%%$'\n'}
   local cmd=${line%% *}
   test $(echo ${line} |grep -o '\n' |wc -l)  -lt 10 || echo '*no Insert History'
 }
 
-# Memo書き込み関数(alias @write)
+_bootmsg "Define Functions [memo_write]"
 function memo_write(){
     if test "$MEMO" = ""
     then
@@ -185,12 +173,13 @@ function memo_write(){
 }
 alias @write='memo_write'
 
-# For Hyper Terminal
+_bootmsg "Define Functions [title]"
 function title() { echo -e "\033]0;${1:?please specify a title}\007" ; }
+_bootmsg "Define Functions [@reload]"
 function @reload(){
   export  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 }
-# for Weather
+_bootmsg "Define Functions [wttr]"
 function wttr(){
   if [[ $1 = "" ]]
   then
@@ -203,7 +192,7 @@ function wttr(){
 
 ##############################
 ## EXIT
-
+_bootmsg "Define exit function"
 _exit_function(){
   memo_write
   # PPIDが`init`でRunningしているWSLの場合は、Exit 0で切らせる。
@@ -213,20 +202,20 @@ _exit_function(){
 
 trap "_exit_function" EXIT INT
 
-#Custom Config
+_bootmsg "Loading Extensions"
 for i in $(/bin/ls -1 "${ZDOTDIR}/custom-enable.d")
 do
+    _bootmsg "Loading Extensions [${i}]"
     source "${ZDOTDIR}/custom-enable.d/${i}"
 done
-# Custom.d
+_bootmsg "Loading Custom Extensions"
 for i in $(/bin/ls -1 "${ZDOTDIR}/custom.d")
 do
+    _bootmsg "Loading Custom Extensions [${i}]"
     source "${ZDOTDIR}/custom.d/${i}"
 done
 
-
-
-# ファイル上のメモを参照
+_bootmsg "Loading cache MEMO"
 declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
 # Trap exit to run .zlogout
@@ -243,3 +232,9 @@ TRAPEXIT() {
 
 
 rm $ZLOCKFILE
+
+clear
+for i in $(/bin/ls -1 "${ZDOTDIR}/display.d")
+do
+    source "${ZDOTDIR}/display.d/${i}"
+done

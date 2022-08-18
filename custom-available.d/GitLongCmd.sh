@@ -11,6 +11,7 @@ function git-oneline(){
     return 1
   fi
   git add $2
-  git commit -m"$1"
+  git commit -m "$1"
 
 }
+

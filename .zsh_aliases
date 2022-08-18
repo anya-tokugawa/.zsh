@@ -36,6 +36,7 @@
     alias ok='true'
     alias ng='false'
     alias tailfull="tail -n"$(($(tput lines) -2))
+    alias wgetmp='wget -P /tmp'
 : "history"
     alias hist='history'
     alias histall='history-all'
@@ -61,6 +62,9 @@
     alias exit-zsh="exit 14"
     alias relogin-zsh='exec $SHELL -l'
     alias reload-zsh='exec $SHELL'
+
+    alias ta='tmux a -t'
+    alias tn='tmux new -s'
 
     alias bash="export RUN_ZSH=1 ; /usr/bin/env bash"
     function drop_caches(){

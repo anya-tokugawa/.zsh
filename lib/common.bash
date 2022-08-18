@@ -57,3 +57,6 @@ _yesno() {
   done
 }
 export -f _yesno
+
+export CHECK_MARK="\033[0;32m\xE2\x9C\x94\033[0m"
+export CROSS_MARK="\033[0;31m\xEc\x9C\x95\033[0m"

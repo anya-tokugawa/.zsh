@@ -7,9 +7,20 @@ _hasCommand () {
 }
 
 if _hasCommand exa ; then
-  alias ls="exa"
-  alias la="exa -a"
-  alias ll='ls --git -lbghu'
+  alias ls="exa --icons --git"
+  alias la="exa -a --icons --git"
+  alias ll='ls --git -lbghu --icons'
+  _ls(){
+    if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
+      echo "${PWD}: [$(git rev-parse --abbrev-ref HEAD)]"
+        git status -sb
+        echo ----------
+    else
+        echo "${PWD}:"
+    fi
+    exa --git --icons --group-directories-first -F --sort modified .
+    zle reset-prompt
+  }
   # overwrite chpwd function
 fi
 

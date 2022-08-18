@@ -6,6 +6,9 @@ case $- in
 esac
 
 export ZDOTDIR=$HOME/.zsh
+export ZSH_WORKSPACE="null"
+export WTTR_LOCATION="tokyo"
+export ZSH_BOOTMSG=0
 export ZLOCKFILE="$(mktemp).zshlock"
 echo "$PID" > $ZLOCKFILE
 
@@ -28,10 +31,15 @@ function check_booting(){
 	done
 }
 
+_bootmsg(){
+  [[ $ZSH_BOOTMSG -eq 1 ]] && echo "BOOTING: $@"
+}
+
 check_booting &!
 
+source $ZDOTDIR/config
 
-
+_bootmsg "loading .zshenv"
 # auto load
 autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' check-for-changes true
@@ -45,7 +53,7 @@ export HISTFILE=${ZDOTDIR}/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-: "PATH"
+_bootmsg "Including PATH"
 for i in `ls -1 --file-type "${ZDOTDIR}/include.d"`
 do
   source "${ZDOTDIR}/include.d/${i}"
@@ -63,29 +71,24 @@ export LC_MONETARY="ja_JP.UTF-8"
 export LC_COLLATE="ja_JP.UTF-8"
 export LC_MESSAGES=C
 
-: "DEFAULT EDITOR"
+_bootmsg "Setting Default Command"
 declare -x EDITOR=`which vim`
-: "DEFAULT PAGEOR"
 declare -x PAGEOR=`which more`
 
-: "IP_ADDRESS"
-#declare -a -x IP_ADDRESSES
-#IP_ADDRESSES=$(ip a | grep inet | grep -ve inet6 -e 127.0.0. | awk '{print $2}'| xargs)
 
-: "OUTPUT DISPLAY"
+_bootmsg "Setting DISPLAY"
 [[ -z "$DISPLAY" ]] && export DISPLAY=":0"
 
-: "GIT ACCESS FS"
+_bootmsg "Setting Enviroment Variables"
 export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
-
 export TMUX_TMPDIR="$ZDOTDIR/TMUX_SESSIONS/"
-
 export ZSH_TASKS="${HOME}/.ztasks"
-
-: "Go"
 export GOPATH="${HOME}/.go/"
 
-
-: "Load Profile"
+_bootmsg "Loading Profile"
 source $ZDOTDIR/.zprofile
-. "$HOME/.cargo/env"
+
+_bootmsg "Check and Loading Cargo Enviroment"
+if [[ -f "$HOME/.cargo/env" ]];then
+ source "$HOME/.cargo/env"
+fi

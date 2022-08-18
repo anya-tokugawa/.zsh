@@ -21,6 +21,7 @@ FUTURE: [see FUTURE.md](FUTURE.md)
 - perl
 - git
 - go (gen uuid)
+- if it use `exa` command, you must be Nerd Font https://www.nerdfonts.com/font-downloads
 
 ## Install
 
