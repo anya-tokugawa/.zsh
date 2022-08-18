@@ -100,4 +100,5 @@ wslnotify() {
   fi
   echo "$sound $text" | nc -w1 127.0.0.1 "$WSL_NOTIF_PORT"
 }
-alias ssh='ssh -R ${WSL_NOTIF_PORT}:localhost:${WSL_NOTIF_PORT}'
+export SSH_OPTS='-R ${WSL_NOTIF_PORT}:localhost:${WSL_NOTIF_PORT}'"$SSH_OPTS"
+alias ssh='ssh -R ${SSH_OPTS}'
