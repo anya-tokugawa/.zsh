@@ -43,22 +43,23 @@ function precmd () {
       PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
       if [[ "$TASK" != "" ]] && [[ "${vcs_info_msg_0_}" != "" ]];then
         PROMPT="%F{013}${vcs_info_msg_0_}%F{154}* $TASK
-${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} %* > %F{reset}"
       elif [[ "$TASK" != "" ]];then
         PROMPT="%F{154}* $TASK
-${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} %* > %F{reset}"
       elif [[ "$vcs_info_msg_0_" != "" ]];then
         PROMPT="%F{013}${vcs_info_msg_0_}
-${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} > %F{reset}"
+${STATUS_COLOR}${ZSH_WORKSPACE}%F{207} %* > %F{reset}"
       else
-        PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207} > %F{reset}"
+        PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207} %* > %F{reset}"
       fi
 
 }
 vcs_info
 PREPWD=$(pwd | perl -pe 's!^(.{10,}?/)(.+)(/.{15,})$!$1...$3!')
 PROMPT="${STATUS_COLOR}${ZSH_WORKSPACE}%F{013}"'${vcs_info_msg_0_}'"${task_prompt}%F{207}> %F{reset}"
-RPROMPT="%F{190}"'${MEMO}'"%F{reset}"
+
+# RPROMPT show last
 
 if test "$(whoami)" == "root"
 then
@@ -189,7 +190,14 @@ function wttr(){
   fi
   curl https://ja.wttr.in/${_wttr}?format="%l:+%c\n------\nReal:+%t\nFeel:+%f\nWind:+%w\nSunRise:+%S\nSun-Set:+%s\n"
 }
+function memclear(){
+    R=$(awk 'FNR==5 {print $2/1024}' /proc/meminfo)
+    echo "clear memory $R MiB to ..."
 
+    echo 3 | sudo tee /proc/sys/vm/drop_caches
+    sleep 1
+    awk -v r=$R 'FNR==5 {print "cleared: " r-($2/1024) " MiB"}' /proc/meminfo
+  }
 ##############################
 ## EXIT
 _bootmsg "Define exit function"
@@ -248,11 +256,29 @@ TRAPEXIT() {
       source "${HOME}/.zsh/.zlogout"
 }
 
+# fzf config
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-rm $ZLOCKFILE
+rm -f $ZLOCKFILE
 
 clear
+
+if [[ -v DIRECT_SSH_NAME ]];then
+  ssh "$DIRECT_SSH_NAME"
+fi
+
 for i in $(/bin/ls -1 "${ZDOTDIR}/display.d")
 do
-    source "${ZDOTDIR}/display.d/${i}"
+  f="${ZDOTDIR}/display.d/${i}"
+  [[ -f "$f" ]] && source "$f"
 done
+
+# refresh 1sec.
+TRAPALRM(){
+  zle reset-prompt
+}
+TMOUT=1
+
+MODE_INDICATOR_VICMD='%F{9}<%F{1}<<%f'
+MODE_INDICATOR_SEARCH='%F{13}<%F{5}<<%f'
+RPROMPT="${MODE_INDICATOR_PROMPT}%F{190}"'${MEMO}'"%F{reset}"
