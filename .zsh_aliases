@@ -30,6 +30,7 @@
     alias vi='vim'
     alias e='vim'
     alias g='subl'
+    alias nb='newsboat'
     alias of='libreoffice'
     alias zsh-reload='source ~/.zshenv'
     alias bye='loginctl lock-session'
@@ -67,6 +68,7 @@
     alias tn='tmux new -s'
 
     alias bash="export RUN_ZSH=1 ; /usr/bin/env bash"
+    alias newsboat='unset DISPLAY; newsboat'
     function drop_caches(){
 
       if [[ $# -ne 1 ]]
