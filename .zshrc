@@ -76,12 +76,13 @@ fi
         #echo "Latest: $(git log  | head -n6 | grep 'Date' | sed 's/Date:   //')"
         OLD_ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
         (git pull  > /dev/null 2>&1) && \
-          ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
+        ZSH_CONF_VERSION=$(git log -n 1 --pretty=format:"%H")
         if [[ "$ZSH_CONF_VERSION" != "" ]]
         then
             if [ $OLD_ZSH_CONF_VERSION != $ZSH_CONF_VERSION ]
             then
-              TASK="[ZSH_UPDATED] $TASK"
+              echo "[ZSH_UPDATED]"
+              echo
             fi
         fi
     }
@@ -248,7 +249,7 @@ declare -g  MEMO=$(/bin/cat ${ZDOTDIR}/MEMO.txt | xargs)
 
 # Trap exit to run .zlogout
 #source $ZDOTDIR/logout.sh
-alias exit="_exit_functiont; exit" # run _exit_function before exit
+alias exit="_exit_function; exit" # run _exit_function before exit
 
 
 TRAPEXIT() {
@@ -282,3 +283,7 @@ TMOUT=1
 MODE_INDICATOR_VICMD='%F{9}<%F{1}<<%f'
 MODE_INDICATOR_SEARCH='%F{13}<%F{5}<<%f'
 RPROMPT="${MODE_INDICATOR_PROMPT}%F{190}"'${MEMO}'"%F{reset}"
+
+if [[ -v DIRECT_SSH_NAME ]] && [[ -v WSL_DISTRO_NAME ]];then
+  ssh "$DIRECT_SSH_NAME"
+fi

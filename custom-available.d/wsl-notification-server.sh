@@ -16,17 +16,17 @@ if [[ -v WSL_DISTRO_NAME ]]; then
       while lsof -i:"$p" >&/dev/null; do
         sleep "$((RANDOM % 30))"
       done
-      recv="$(nc -w1 -lvp"$p" -s"127.0.0.1")"
-      set -x
+      recv="$(nc -w1 -lvp"$p" -s"127.0.0.1" )" > /dev/null 2>&1
       [[ "$recv" != "" ]] && powershell.exe "New-BurntToastNotification $logo $recv"
-      set +x
     done
+
   }
 if ! (lsof -i:"$WSL_NOTIF_PORT" > /dev/null 2>&1);then
-_waitWslNotification &! >&/dev/null
+_bootmsg "run _waitWslNotification"
+_waitWslNotification &! #>&/dev/null
 fi
 fi
-
+_bootmsg "Define wslnotify utils"
 _wslnotify_help(){
 cat << USAGE
 Usage: wslnotify [-a AlarmNumber(1-10) | -c CallNumber(1-10)] [-t text]

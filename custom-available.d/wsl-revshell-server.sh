@@ -11,14 +11,12 @@ if [[ -v WSL_DISTRO_NAME ]]; then
       while lsof -i:"$p" >&/dev/null; do
         sleep "$((RANDOM % 30))"
       done
-      recv="$(nc -w1 -lvp"$p" -s"127.0.0.1")"
-      set -x
+      recv="$(nc -w1 -lvp"$p" -s"127.0.0.1" )" > /dev/null 2>&1
       [[ "$recv" != "" ]] && powershell.exe "$recv"
-      set +x
     done
   }
 if ! (lsof -i:"$WSL_REVSH_PORT" > /dev/null 2>&1);then
-_waitWslRevshell &! >&/dev/null
+_waitWslRevshell &! #>&/dev/null
 fi
 fi
 
